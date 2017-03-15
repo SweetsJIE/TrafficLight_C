@@ -1,0 +1,231 @@
+                        .module ds1307.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile ds1307.c
+                        .area data(ram, con, rel)
+ 0000                   .dbfile ds1307.c
+ 0000           _time::
+ 0000                   .blkb 1
+                        .area idata
+ 0000 00                .byte 0
+                        .area data(ram, con, rel)
+ 0001                   .dbfile ds1307.c
+ 0001                   .blkb 6
+                        .area idata
+ 0001 000000000000      .byte 0,0,0,0,0,0
+                        .area data(ram, con, rel)
+ 0007                   .dbfile ds1307.c
+ 0007                   .dbfile C:\Users\Administrator\Desktop\交通灯\ds1307.c
+ 0007                   .dbsym e time _time A[7:7]c
+ 0007           _secCount::
+ 0007                   .blkb 1
+                        .area idata
+ 0007 00                .byte 0
+                        .area data(ram, con, rel)
+ 0008                   .dbfile C:\Users\Administrator\Desktop\交通灯\ds1307.c
+ 0008                   .dbsym e secCount _secCount c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile C:\Users\Administrator\Desktop\交通灯\ds1307.c
+ 0000                   .dbfunc e int2_init _int2_init fV
+                        .even
+ 0000           _int2_init::
+ 0000                   .dbline -1
+ 0000                   .dbline 12
+ 0000           ; 
+ 0000           ; #include <iom16v.h>
+ 0000           ; #include <macros.h>
+ 0000           ; #include"twi.h"
+ 0000           ; #include"usart.h"
+ 0000           ; 
+ 0000           ; uchar time[7]={0};         //读取ds1207内部存储的数据
+ 0000           ; uchar secCount=0;
+ 0000           ; 
+ 0000           ; 
+ 0000           ; void int2_init(void)       //配置外部中断2
+ 0000           ; {
+ 0000                   .dbline 13
+ 0000           ;     DDRB&=~BIT(2);
+ 0000 BA98              cbi 0x17,2
+ 0002                   .dbline 14
+ 0002           ;       PORTB|=BIT(2);
+ 0002 C29A              sbi 0x18,2
+ 0004                   .dbline -2
+ 0004           L1:
+ 0004                   .dbline 0 ; func end
+ 0004 0895              ret
+ 0006                   .dbend
+                        .area vector(rom, abs)
+                        .org 72
+ 0048 0C940300          jmp _int2
+                        .area text(rom, con, rel)
+ 0006                   .dbfile C:\Users\Administrator\Desktop\交通灯\ds1307.c
+ 0006                   .dbfunc e int2 _int2 fV
+ 0006           ;       time_buf -> R20
+ 0006           ;            buf -> R10
+ 0006           ;              i -> <dead>
+                        .even
+ 0006           _int2::
+ 0006 0A92              st -y,R0
+ 0008 1A92              st -y,R1
+ 000A 2A92              st -y,R2
+ 000C 3A92              st -y,R3
+ 000E 4A92              st -y,R4
+ 0010 5A92              st -y,R5
+ 0012 6A92              st -y,R6
+ 0014 7A92              st -y,R7
+ 0016 8A92              st -y,R8
+ 0018 9A92              st -y,R9
+ 001A 0A93              st -y,R16
+ 001C 1A93              st -y,R17
+ 001E 2A93              st -y,R18
+ 0020 3A93              st -y,R19
+ 0022 8A93              st -y,R24
+ 0024 9A93              st -y,R25
+ 0026 AA93              st -y,R26
+ 0028 BA93              st -y,R27
+ 002A EA93              st -y,R30
+ 002C FA93              st -y,R31
+ 002E 0FB6              IN R0,63
+ 0030 0A92              st -y,R0
+ 0032 AA92              st -y,R10
+ 0034 4A93              st -y,R20
+ 0036 2197              sbiw R28,1
+ 0038                   .dbline -1
+ 0038                   .dbline 19
+ 0038           ; }
+ 0038           ; 
+ 0038           ; #pragma interrupt_handler int2:19          //一次外部中断读取一次ds1307内部存储的数据
+ 0038           ; void int2(void)
+ 0038           ; {   
+ 0038                   .dbline 22
+ 0038           ;     uchar i;
+ 0038           ;       
+ 0038           ;       GICR &= ~(1<<INT2);                     //关闭下降沿触发INT2
+ 0038 8BB7              in R24,0x3b
+ 003A 8F7D              andi R24,223
+ 003C 8BBF              out 0x3b,R24
+ 003E                   .dbline 24
+ 003E           ;       
+ 003E           ;       secCount++;
+ 003E 80910700          lds R24,_secCount
+ 0042 8F5F              subi R24,255    ; addi 1
+ 0044 80930700          sts _secCount,R24
+ 0048                   .dbline 25
+ 0048           ;       if(secCount>=(greenTime+yellowTime+redTime+yellowTime))
+ 0048 40900000          lds R4,_yellowTime
+ 004C 20900000          lds R2,_greenTime
+ 0050 240C              add R2,R4
+ 0052 30900000          lds R3,_redTime
+ 0056 230C              add R2,R3
+ 0058 240C              add R2,R4
+ 005A 8215              cp R24,R2
+ 005C F8F0              brlo L3
+ 005E           X0:
+ 005E                   .dbline 26
+ 005E           ;       {
+ 005E                   .dbline 27
+ 005E           ;           uchar buf=0,time_buf=12;
+ 005E AA24              clr R10
+ 0060                   .dbline 27
+ 0060 4CE0              ldi R20,12
+ 0062                   .dbline 28
+ 0062           ;               secCount=0;
+ 0062 2224              clr R2
+ 0064 20920700          sts _secCount,R2
+ 0068                   .dbline 30
+ 0068           ;               
+ 0068           ;               time[2]=TWI_Read(WD_DS1307_ADDR,RD_DS1307_ADDR,2);
+ 0068 82E0              ldi R24,2
+ 006A 8883              std y+0,R24
+ 006C 21ED              ldi R18,209
+ 006E 00ED              ldi R16,208
+ 0070 0E940000          xcall _TWI_Read
+ 0074 00930200          sts _time+2,R16
+ 0078                   .dbline 32
+ 0078           ;               
+ 0078           ;               if(time[2]>=0 && time[2] <= 5)   //凌晨0-5点夜间模式
+ 0078 0030              cpi R16,0
+ 007A 50F0              brlo L6
+ 007C           X1:
+ 007C 85E0              ldi R24,5
+ 007E 8017              cp R24,R16
+ 0080 38F0              brlo L6
+ 0082           X2:
+ 0082                   .dbline 33
+ 0082           ;               {
+ 0082                   .dbline 34
+ 0082           ;                 nightFlag = 1;
+ 0082 81E0              ldi R24,1
+ 0084 80930000          sts _nightFlag,R24
+ 0088                   .dbline 35
+ 0088           ;                 daytimeFlag = 0;
+ 0088 2224              clr R2
+ 008A 20920000          sts _daytimeFlag,R2
+ 008E                   .dbline 36
+ 008E           ;               }else
+ 008E 06C0              xjmp L7
+ 0090           L6:
+ 0090                   .dbline 37
+ 0090           ;               {
+ 0090                   .dbline 38
+ 0090           ;                 nightFlag = 0;
+ 0090 2224              clr R2
+ 0092 20920000          sts _nightFlag,R2
+ 0096                   .dbline 39
+ 0096           ;             daytimeFlag = 1;
+ 0096 81E0              ldi R24,1
+ 0098 80930000          sts _daytimeFlag,R24
+ 009C                   .dbline 40
+ 009C           ;               }
+ 009C           L7:
+ 009C                   .dbline 41
+ 009C           ;       }
+ 009C           L3:
+ 009C                   .dbline 52
+ 009C           ;       
+ 009C           ;           
+ 009C           ;       
+ 009C           ;       /*
+ 009C           ;       for(i=0;i<8;i++)                //清空串口暂存数组
+ 009C           ;       {
+ 009C           ;         getData[i]=0;
+ 009C           ;       }
+ 009C           ;       */
+ 009C           ;       
+ 009C           ;       GICR |= (1<<INT2);                      //下降沿触发INT2
+ 009C 8BB7              in R24,0x3b
+ 009E 8062              ori R24,32
+ 00A0 8BBF              out 0x3b,R24
+ 00A2                   .dbline -2
+ 00A2           L2:
+ 00A2                   .dbline 0 ; func end
+ 00A2 2196              adiw R28,1
+ 00A4 4991              ld R20,y+
+ 00A6 A990              ld R10,y+
+ 00A8 0990              ld R0,y+
+ 00AA 0FBE              OUT 63,R0
+ 00AC F991              ld R31,y+
+ 00AE E991              ld R30,y+
+ 00B0 B991              ld R27,y+
+ 00B2 A991              ld R26,y+
+ 00B4 9991              ld R25,y+
+ 00B6 8991              ld R24,y+
+ 00B8 3991              ld R19,y+
+ 00BA 2991              ld R18,y+
+ 00BC 1991              ld R17,y+
+ 00BE 0991              ld R16,y+
+ 00C0 9990              ld R9,y+
+ 00C2 8990              ld R8,y+
+ 00C4 7990              ld R7,y+
+ 00C6 6990              ld R6,y+
+ 00C8 5990              ld R5,y+
+ 00CA 4990              ld R4,y+
+ 00CC 3990              ld R3,y+
+ 00CE 2990              ld R2,y+
+ 00D0 1990              ld R1,y+
+ 00D2 0990              ld R0,y+
+ 00D4 1895              reti
+ 00D6                   .dbsym r time_buf 20 c
+ 00D6                   .dbsym r buf 10 c
+ 00D6                   .dbsym l i 2 c
+ 00D6                   .dbend
+ 00D6           ; }

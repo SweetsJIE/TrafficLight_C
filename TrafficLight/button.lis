@@ -1,0 +1,85 @@
+                        .module button.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile button.c
+                        .area data(ram, con, rel)
+ 0000                   .dbfile button.c
+ 0000           _S_flag::
+ 0000                   .blkb 1
+                        .area idata
+ 0000 00                .byte 0
+                        .area data(ram, con, rel)
+ 0001                   .dbfile button.c
+ 0001                   .dbfile C:\Users\Administrator\Desktop\交通灯\button.c
+ 0001                   .dbsym e S_flag _S_flag c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile C:\Users\Administrator\Desktop\交通灯\button.c
+ 0000                   .dbfunc e Int0_button_init _Int0_button_init fV
+                        .even
+ 0000           _Int0_button_init::
+ 0000                   .dbline -1
+ 0000                   .dbline 8
+ 0000           ; 
+ 0000           ; #include<iom16v.h>
+ 0000           ; #include"button.h"
+ 0000           ; 
+ 0000           ; uchar S_flag=0;
+ 0000           ; 
+ 0000           ; void Int0_button_init()
+ 0000           ; {
+ 0000                   .dbline 9
+ 0000           ;       MCUCR = (1<<ISC01);                                                                             //下降沿触发
+ 0000 82E0              ldi R24,2
+ 0002 85BF              out 0x35,R24
+ 0004                   .dbline 10
+ 0004           ;       GICR = (1<<INT0);                                                                               //使能外部中断0
+ 0004 80E4              ldi R24,64
+ 0006 8BBF              out 0x3b,R24
+ 0008                   .dbline -2
+ 0008           L1:
+ 0008                   .dbline 0 ; func end
+ 0008 0895              ret
+ 000A                   .dbend
+                        .area vector(rom, abs)
+                        .org 4
+ 0004 0C940500          jmp _Int0_button
+                        .area text(rom, con, rel)
+ 000A                   .dbfile C:\Users\Administrator\Desktop\交通灯\button.c
+ 000A                   .dbfunc e Int0_button _Int0_button fV
+                        .even
+ 000A           _Int0_button::
+ 000A 2A92              st -y,R2
+ 000C 0A93              st -y,R16
+ 000E 1A93              st -y,R17
+ 0010 2FB6              IN R2,63
+ 0012 2A92              st -y,R2
+ 0014                   .dbline -1
+ 0014                   .dbline 14
+ 0014           ; }
+ 0014           ; #pragma interrupt_handler Int0_button: 2
+ 0014           ; void Int0_button()
+ 0014           ; {
+ 0014                   .dbline 15
+ 0014           ;       S_flag=!S_flag;
+ 0014 20900000          lds R2,_S_flag
+ 0018 2220              tst R2
+ 001A 19F4              brne L3
+ 001C           X0:
+ 001C 01E0              ldi R16,1
+ 001E 10E0              ldi R17,0
+ 0020 02C0              xjmp L4
+ 0022           L3:
+ 0022 0027              clr R16
+ 0024 1127              clr R17
+ 0026           L4:
+ 0026 00930000          sts _S_flag,R16
+ 002A                   .dbline -2
+ 002A           L2:
+ 002A                   .dbline 0 ; func end
+ 002A 2990              ld R2,y+
+ 002C 2FBE              OUT 63,R2
+ 002E 1991              ld R17,y+
+ 0030 0991              ld R16,y+
+ 0032 2990              ld R2,y+
+ 0034 1895              reti
+ 0036                   .dbend
+ 0036           ; }

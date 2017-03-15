@@ -1,0 +1,329 @@
+XL
+H 1 areas 8 global symbols
+M twi.c
+S _delay_nms Ref0000
+S push_xgset00FC Ref0000
+S pop_xgset00FC Ref0000
+A text size 22E flags 0
+dbfile twi.c
+dbfile C:\Users\Administrator\Desktop\½»Í¨µÆ\twi.c
+dbfunc e TWI_init 0 fV
+dbline FFFFFFFF 0
+dbline A 0
+dbline B 0
+dbline C 4
+dbline FFFFFFFE 8
+dbline 0 8
+dbfunc e TWI_Write A fc
+dbsym r RegAddress C c
+dbsym r Wdata A c
+dbsym r SlaveAddress E c
+dbline FFFFFFFF 14
+dbline 10 14
+dbline 11 14
+dbline 12 18
+dbline 12 18
+dbline 12 18
+dbline 12 1E
+dbline 12 1E
+dbline 13 1E
+dbline 14 26
+dbline 16 2A
+dbline 16 2A
+dbline 16 2C
+dbline 16 30
+dbline 16 30
+dbline 17 30
+dbline 17 30
+dbline 17 30
+dbline 17 36
+dbline 17 36
+dbline 18 36
+dbline 19 3E
+dbline 1B 42
+dbline 1B 42
+dbline 1B 44
+dbline 1B 48
+dbline 1B 48
+dbline 1C 48
+dbline 1C 48
+dbline 1C 48
+dbline 1C 4E
+dbline 1C 4E
+dbline 1D 4E
+dbline 1E 56
+dbline 20 5A
+dbline 20 5A
+dbline 20 5C
+dbline 20 60
+dbline 20 60
+dbline 21 60
+dbline 21 60
+dbline 21 60
+dbline 21 66
+dbline 21 66
+dbline 22 66
+dbline 23 6E
+dbline 25 72
+dbline 26 76
+dbline 27 7E
+dbline FFFFFFFE 80
+dbline 0 80
+dbfunc e TWI_Read 84 fc
+dbsym r temp A c
+dbsym r RegAddress A c
+dbsym r SlaveAddress_R 12 c
+dbsym r SlaveAddress_W 10 c
+dbline FFFFFFFF 88
+dbline 2C 88
+dbline 2E 88
+dbline 2F 8C
+dbline 2F 8C
+dbline 2F 8C
+dbline 2F 92
+dbline 2F 92
+dbline 33 92
+dbline 33 92
+dbline 33 94
+dbline 33 98
+dbline 33 98
+dbline 34 98
+dbline 34 98
+dbline 34 98
+dbline 34 9E
+dbline 34 9E
+dbline 35 9E
+dbline 36 A6
+dbline 38 AA
+dbline 38 AA
+dbline 38 AC
+dbline 38 B0
+dbline 38 B0
+dbline 39 B0
+dbline 39 B0
+dbline 39 B0
+dbline 39 B6
+dbline 39 B6
+dbline 3A B6
+dbline 3B BE
+dbline 3D C2
+dbline 3E C6
+dbline 3E C6
+dbline 3E C6
+dbline 3E CC
+dbline 3E CC
+dbline 3F CC
+dbline 40 D4
+dbline 42 D8
+dbline 42 D8
+dbline 42 DA
+dbline 42 DE
+dbline 42 DE
+dbline 43 DE
+dbline 43 DE
+dbline 43 DE
+dbline 43 E4
+dbline 43 E4
+dbline 44 E4
+dbline 45 EC
+dbline 47 F0
+dbline 48 F4
+dbline 48 F4
+dbline 48 F4
+dbline 48 FA
+dbline 48 FA
+dbline 49 FA
+dbline 4B 102
+dbline 4D 106
+dbline 4E 108
+dbline 4F 10C
+dbline FFFFFFFE 10E
+dbline 0 10E
+dbfunc e TWI_Read_1307 112 fc
+dbsym l data 3 pc
+dbsym r RegAddress A c
+dbsym r SlaveAddress_R 12 c
+dbsym r SlaveAddress_W 10 c
+dbline FFFFFFFF 116
+dbline 53 116
+dbline 54 116
+dbline 55 11A
+dbline 55 11A
+dbline 55 11A
+dbline 55 120
+dbline 55 120
+dbline 56 120
+dbline 57 128
+dbline 59 12C
+dbline 59 12C
+dbline 59 12E
+dbline 59 132
+dbline 59 132
+dbline 5A 132
+dbline 5A 132
+dbline 5A 132
+dbline 5A 138
+dbline 5A 138
+dbline 5B 138
+dbline 5C 140
+dbline 5E 144
+dbline 5E 144
+dbline 5E 146
+dbline 5E 14A
+dbline 5E 14A
+dbline 5F 14A
+dbline 5F 14A
+dbline 5F 14A
+dbline 5F 150
+dbline 5F 150
+dbline 60 150
+dbline 61 158
+dbline 63 15C
+dbline 64 160
+dbline 64 160
+dbline 64 160
+dbline 64 166
+dbline 64 166
+dbline 65 166
+dbline 66 16E
+dbline 68 172
+dbline 68 172
+dbline 68 174
+dbline 68 178
+dbline 68 178
+dbline 69 178
+dbline 69 178
+dbline 69 178
+dbline 69 17E
+dbline 69 17E
+dbline 6A 17E
+dbline 6B 186
+dbline 6D 18A
+dbline 6E 18E
+dbline 6E 18E
+dbline 6E 18E
+dbline 6E 194
+dbline 6E 194
+dbline 6F 194
+dbline 71 19C
+dbline FFFFFFFE 19E
+dbline 0 19E
+dbfunc e Twi_write_data 1A2 fV
+dbsym r i 14 i
+dbline FFFFFFFF 1A8
+dbline 7A 1A8
+dbline 7C 1A8
+dbline 7D 1AE
+dbline 7E 1AE
+dbline 7F 1BA
+dbline 7C 1BA
+dbline 7C 1BE
+dbline 81 1C6
+dbline 82 1CC
+dbline 83 1CC
+dbline 84 1DC
+dbline 81 1DC
+dbline 81 1E0
+dbline 86 1E8
+dbline 87 1EE
+dbline 88 1EE
+dbline 89 1FE
+dbline 86 1FE
+dbline 86 202
+dbline 8B 20A
+dbline 8C 210
+dbline 8D 210
+dbline 8E 218
+dbline 8B 218
+dbline 8B 21C
+dbline FFFFFFFE 226
+dbline 0 226
+S _Twi_write_data Def01A2
+S _TWI_Read Def0084
+S _TWI_Read_1307 Def0112
+S _TWI_init Def0000
+S _TWI_Write Def000A
+T 00 00 8F E0 80 B9 22 24 21 B8 08 95
+R 00 00 00 00
+T 0A 00 0E 94 00 00 A2 2E E0 2E CE 80 84 EA 86 BF
+R 00 00 00 00 12 04 01 00
+T 18 00 26 B6 27 FE FD CF 81 B1 88 7F 88 30 11 F0
+R 00 00 00 00
+T 26 00 01 E0 2B C0 E3 B8 84 E8 86 BF 26 B6 27 FE
+R 00 00 00 00
+T 34 00 FD CF 81 B1 88 7F 88 31 11 F0 01 E0 1F C0
+R 00 00 00 00
+T 42 00 C3 B8 84 E8 86 BF 26 B6 27 FE FD CF 81 B1
+R 00 00 00 00
+T 50 00 88 7F 88 32 11 F0 01 E0 13 C0 A3 B8 84 E8
+R 00 00 00 00
+T 5E 00 86 BF 26 B6 27 FE FD CF 81 B1 88 7F 88 32
+R 00 00 00 00
+T 6C 00 11 F0 01 E0 07 C0 84 E9 86 BF 0A E0 10 E0
+R 00 00 00 00
+T 7A 00 0E 94 00 00 00 27 0C 94 00 00
+R 00 00 00 00 12 04 00 00 12 0A 02 00
+T 84 00 AA 92 A9 80 84 EA 86 BF 26 B6 27 FE FD CF
+R 00 00 00 00
+T 92 00 03 B9 84 E8 86 BF 26 B6 27 FE FD CF 81 B1
+R 00 00 00 00
+T A0 00 88 7F 88 31 11 F0 01 E0 32 C0 A3 B8 84 E8
+R 00 00 00 00
+T AE 00 86 BF 26 B6 27 FE FD CF 81 B1 88 7F 88 32
+R 00 00 00 00
+T BC 00 11 F0 01 E0 26 C0 84 EA 86 BF 26 B6 27 FE
+R 00 00 00 00
+T CA 00 FD CF 81 B1 88 7F 80 31 11 F0 01 E0 1B C0
+R 00 00 00 00
+T D8 00 23 B9 84 E8 86 BF 26 B6 27 FE FD CF 81 B1
+R 00 00 00 00
+T E6 00 88 7F 80 34 11 F0 01 E0 0F C0 84 E8 86 BF
+R 00 00 00 00
+T F4 00 26 B6 27 FE FD CF 81 B1 88 7F 88 35 11 F0
+R 00 00 00 00
+T 02 01 01 E0 04 C0 A3 B0 84 E9 86 BF 0A 2D A9 90
+R 00 00 00 00
+T 10 01 08 95
+R 00 00 00 00
+T 12 01 AA 92 A9 80 84 EA 86 BF 26 B6 27 FE FD CF
+R 00 00 00 00
+T 20 01 81 B1 88 7F 88 30 11 F0 01 E0 39 C0 03 B9
+R 00 00 00 00
+T 2E 01 84 E8 86 BF 26 B6 27 FE FD CF 81 B1 88 7F
+R 00 00 00 00
+T 3C 01 88 31 11 F0 01 E0 2D C0 A3 B8 84 E8 86 BF
+R 00 00 00 00
+T 4A 01 26 B6 27 FE FD CF 81 B1 88 7F 88 32 11 F0
+R 00 00 00 00
+T 58 01 01 E0 21 C0 84 EA 86 BF 26 B6 27 FE FD CF
+R 00 00 00 00
+T 66 01 81 B1 88 7F 80 31 11 F0 01 E0 16 C0 23 B9
+R 00 00 00 00
+T 74 01 84 E8 86 BF 26 B6 27 FE FD CF 81 B1 88 7F
+R 00 00 00 00
+T 82 01 80 34 11 F0 01 E0 0A C0 84 E8 86 BF 26 B6
+R 00 00 00 00
+T 90 01 27 FE FD CF 81 B1 88 7F 88 35 09 F0 01 E0
+R 00 00 00 00
+T 9E 01 A9 90 08 95
+R 00 00 00 00
+T A2 01 4A 93 5A 93 21 97 44 27 55 27 08 C0 48 83
+R 00 00 00 00
+T B0 01 9A 01 20 5D 3F 4F 00 EA 28 DF 4F 5F 5F 4F
+R 00 00 00 00
+T BE 01 44 30 E0 E0 5E 07 A0 F3 44 27 55 27 0A C0
+R 00 00 00 00
+T CC 01 CA 01 04 96 88 83 9A 01 2F 5B 3F 4F 00 EA
+R 00 00 00 00
+T DA 01 17 DF 4F 5F 5F 4F 4A 31 E0 E0 5E 07 90 F3
+R 00 00 00 00
+T E8 01 44 27 55 27 0A C0 CA 01 4E 96 88 83 9A 01
+R 00 00 00 00
+T F6 01 2F 59 3F 4F 00 EA 06 DF 4F 5F 5F 4F 4A 31
+R 00 00 00 00
+T 04 02 E0 E0 5E 07 90 F3 48 E3 50 E0 06 C0 48 83
+R 00 00 00 00
+T 12 02 20 E3 00 EA F9 DE 4F 5F 5F 4F 8F EF 90 E0
+R 00 00 00 00
+T 20 02 84 17 95 07 A8 F7 21 96 59 91 49 91 08 95
+R 00 00 00 00

@@ -1,0 +1,53 @@
+XL
+H 1 areas 5 global symbols
+M eeprom.c
+S _delay_nms Ref0000
+S push_xgset300C Ref0000
+S pop_xgset300C Ref0000
+A text size 5A flags 0
+dbfile eeprom.c
+dbfile C:\Users\Administrator\Desktop\½»Í¨µÆ\eeprom.c
+dbfunc e Read_EEprom 0 fc
+dbsym r j A c
+dbsym r address 14 i
+dbline FFFFFFFF 6
+dbline E 6
+dbline 10 6
+dbline 10 A
+dbline 11 12
+dbline 12 1A
+dbline 13 20
+dbline 14 22
+dbline 15 2A
+dbline 16 2C
+dbline FFFFFFFE 2E
+dbline 0 2E
+dbfunc e Write_EEprom 32 fV
+dbsym r address 14 i
+dbsym r data A c
+dbline FFFFFFFF 3A
+dbline 1C 3A
+dbline 1D 3A
+dbline 1E 42
+dbline 1F 48
+dbline 20 4A
+dbline 21 4C
+dbline 22 4E
+dbline FFFFFFFE 56
+dbline 0 56
+S _Write_EEprom Def0032
+S _Read_EEprom Def0000
+T 00 00 0E 94 00 00 A8 01 E0 9B 04 C0 00 E2 10 E0
+R 00 00 00 00 12 04 01 00
+T 0E 00 0E 94 00 00 CA 01 80 70 91 70 8F BB CA 01
+R 00 00 00 00 12 04 00 00
+T 1C 00 90 70 8E BB E0 9A 00 E2 10 E0 0E 94 00 00
+R 00 00 00 00 12 0E 00 00
+T 2A 00 AD B2 0A 2D 0C 94 00 00
+R 00 00 00 00 12 08 02 00
+T 32 00 0E 94 00 00 A9 01 A0 2E CA 01 80 70 91 70
+R 00 00 00 00 12 04 01 00
+T 40 00 8F BB CA 01 90 70 8E BB AD BA E2 9A E1 9A
+R 00 00 00 00
+T 4E 00 00 E2 10 E0 0E 94 00 00 0C 94 00 00
+R 00 00 00 00 12 08 00 00 12 0C 02 00

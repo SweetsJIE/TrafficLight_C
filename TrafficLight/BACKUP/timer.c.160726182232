@@ -1,0 +1,21 @@
+#include<iom16v.h>
+#include"timer.h"
+
+
+extern uchar sec = 0;
+
+void timer1_init()
+{
+ 	TCCR1B = (1<<WGM12)|(1<<CS11)|(1<<CS10);		 		//CTC模式、64预分频
+	TIMSK = (1<<OCIE1A);				 					//CTC中断使能
+	OCR1A = 15624;
+}
+#pragma interrupt_handler Int_TCCR1A: 7                    	//CTC中断程序
+void Int_TCCR1A()
+{
+ 	sec++;
+	if(sec==90)
+	{
+		sec=0;
+	}
+}

@@ -1,0 +1,11 @@
+#include<iom16v.h>
+#define uchar unsigned char
+#define uint  unsigned int
+
+
+void main()
+{
+  Init_MAX7219();
+  timer1_init();
+  Int0_button_init();
+}

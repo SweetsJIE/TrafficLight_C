@@ -1,0 +1,1 @@
+main.o MAX7219.o 74LS139.o delay.o ds1307.o twi.o usart.o eeprom.o 

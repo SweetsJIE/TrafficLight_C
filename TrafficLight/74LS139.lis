@@ -1,0 +1,174 @@
+                        .module _74LS139.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile 74LS139.c
+ 0000                   .dbfile C:\Users\Administrator\Desktop\交通灯\74LS139.c
+ 0000                   .dbfunc e main_red _main_red fI
+                        .even
+ 0000           _main_red::
+ 0000                   .dbline -1
+ 0000                   .dbline 6
+ 0000           ; #include<iom16v.h>
+ 0000           ; #include"74LS139.h"
+ 0000           ; 
+ 0000           ; //主干道红灯
+ 0000           ; main_red()
+ 0000           ; {
+ 0000                   .dbline 7
+ 0000           ;   LS139_1A_L;
+ 0000 D898              cbi 0x1b,0
+ 0002                   .dbline 8
+ 0002           ;   LS139_1B_L;
+ 0002 D998              cbi 0x1b,1
+ 0004                   .dbline -2
+ 0004           L1:
+ 0004                   .dbline 0 ; func end
+ 0004 0895              ret
+ 0006                   .dbend
+ 0006                   .dbfunc e main_green _main_green fI
+                        .even
+ 0006           _main_green::
+ 0006                   .dbline -1
+ 0006                   .dbline 13
+ 0006           ; }
+ 0006           ; 
+ 0006           ; //主干道绿灯
+ 0006           ; main_green()
+ 0006           ; {
+ 0006                   .dbline 14
+ 0006           ;   LS139_1A_H;
+ 0006 D89A              sbi 0x1b,0
+ 0008                   .dbline 15
+ 0008           ;   LS139_1B_L;
+ 0008 D998              cbi 0x1b,1
+ 000A                   .dbline -2
+ 000A           L2:
+ 000A                   .dbline 0 ; func end
+ 000A 0895              ret
+ 000C                   .dbend
+ 000C                   .dbfunc e main_yellow _main_yellow fI
+                        .even
+ 000C           _main_yellow::
+ 000C                   .dbline -1
+ 000C                   .dbline 20
+ 000C           ; }
+ 000C           ; 
+ 000C           ; //主干道黄灯
+ 000C           ; main_yellow()
+ 000C           ; {
+ 000C                   .dbline 21
+ 000C           ;   LS139_1A_L;
+ 000C D898              cbi 0x1b,0
+ 000E                   .dbline 22
+ 000E           ;   LS139_1B_H;
+ 000E D99A              sbi 0x1b,1
+ 0010                   .dbline -2
+ 0010           L3:
+ 0010                   .dbline 0 ; func end
+ 0010 0895              ret
+ 0012                   .dbend
+ 0012                   .dbfunc e main_close _main_close fI
+                        .even
+ 0012           _main_close::
+ 0012                   .dbline -1
+ 0012                   .dbline 27
+ 0012           ; }
+ 0012           ; 
+ 0012           ; //主干道灭灯
+ 0012           ; main_close()
+ 0012           ; {
+ 0012                   .dbline 28
+ 0012           ;   LS139_1A_H;
+ 0012 D89A              sbi 0x1b,0
+ 0014                   .dbline 29
+ 0014           ;   LS139_1B_H;
+ 0014 D99A              sbi 0x1b,1
+ 0016                   .dbline -2
+ 0016           L4:
+ 0016                   .dbline 0 ; func end
+ 0016 0895              ret
+ 0018                   .dbend
+ 0018                   .dbfunc e second_red _second_red fI
+                        .even
+ 0018           _second_red::
+ 0018                   .dbline -1
+ 0018                   .dbline 34
+ 0018           ; }
+ 0018           ; 
+ 0018           ; //支干道红灯
+ 0018           ; second_red()
+ 0018           ; {
+ 0018                   .dbline 35
+ 0018           ;   LS139_2A_L;
+ 0018 DA98              cbi 0x1b,2
+ 001A                   .dbline 36
+ 001A           ;   LS139_2B_L;
+ 001A DB98              cbi 0x1b,3
+ 001C                   .dbline -2
+ 001C           L5:
+ 001C                   .dbline 0 ; func end
+ 001C 0895              ret
+ 001E                   .dbend
+ 001E                   .dbfunc e second_green _second_green fI
+                        .even
+ 001E           _second_green::
+ 001E                   .dbline -1
+ 001E                   .dbline 41
+ 001E           ; }
+ 001E           ; 
+ 001E           ; //支干道绿灯
+ 001E           ; second_green()
+ 001E           ; {
+ 001E                   .dbline 42
+ 001E           ;   LS139_2A_H;
+ 001E DA9A              sbi 0x1b,2
+ 0020                   .dbline 43
+ 0020           ;   LS139_2B_L;
+ 0020 DB98              cbi 0x1b,3
+ 0022                   .dbline -2
+ 0022           L6:
+ 0022                   .dbline 0 ; func end
+ 0022 0895              ret
+ 0024                   .dbend
+ 0024                   .dbfunc e second_yellow _second_yellow fI
+                        .even
+ 0024           _second_yellow::
+ 0024                   .dbline -1
+ 0024                   .dbline 48
+ 0024           ; }
+ 0024           ; 
+ 0024           ; //支干道黄灯
+ 0024           ; second_yellow()
+ 0024           ; {
+ 0024                   .dbline 49
+ 0024           ;   LS139_2A_L;
+ 0024 DA98              cbi 0x1b,2
+ 0026                   .dbline 50
+ 0026           ;   LS139_2B_H;
+ 0026 DB9A              sbi 0x1b,3
+ 0028                   .dbline -2
+ 0028           L7:
+ 0028                   .dbline 0 ; func end
+ 0028 0895              ret
+ 002A                   .dbend
+ 002A                   .dbfunc e second_close _second_close fI
+                        .even
+ 002A           _second_close::
+ 002A                   .dbline -1
+ 002A                   .dbline 55
+ 002A           ; }
+ 002A           ; 
+ 002A           ; //支干道灭灯
+ 002A           ; second_close()
+ 002A           ; {
+ 002A                   .dbline 56
+ 002A           ;   LS139_2A_H;
+ 002A DA9A              sbi 0x1b,2
+ 002C                   .dbline 57
+ 002C           ;   LS139_2B_H;
+ 002C DB9A              sbi 0x1b,3
+ 002E                   .dbline -2
+ 002E           L8:
+ 002E                   .dbline 0 ; func end
+ 002E 0895              ret
+ 0030                   .dbend
+ 0030           ; }

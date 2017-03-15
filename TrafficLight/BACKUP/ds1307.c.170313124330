@@ -1,0 +1,88 @@
+
+#include <iom16v.h>
+#include <macros.h>
+#include"twi.h"
+
+uchar time[7]={0};         //读取ds1207内部存储的数据
+uchar time_counter_S=0;
+uchar time_counter_M=0;
+uchar time_buffer[2]={0};
+uchar watch_flag=0;
+uchar time_display_flag=1;
+uchar alarm_flag=0;
+uchar alarm_open=0;
+uchar clock_close=0;
+uchar clock_close_counter=0;
+uchar alarm_2[6]={"0"};
+uchar alarm_1[7]={"0"};
+uchar alarm_buffer[]={"00-00-00"};
+uchar alarm_read[8]={"0"};
+uchar clock_open=0;
+
+
+void int2_init(void)       //配置外部中断2
+{
+    DDRB&=~BIT(2);
+	PORTB|=BIT(2);
+ 	GICR |= (1<<INT2);			//下降沿触发INT2
+}
+
+
+
+#pragma interrupt_handler int2:19          //一次外部中断读取一次ds1207内部存储的数据
+void int2(void)
+{   
+    uchar i;
+	
+	GICR &= ~(1<<INT2);			//关闭下降沿触发INT2
+	if(watch_flag)              //秒表开启标志位
+	{
+	   time_counter_S++;        //秒
+	   time_buffer[0]=time_counter_S;
+	   if(time_counter_S==59)
+	   {
+	      time_counter_S=0;
+	      time_counter_M++;     //分
+	      time_buffer[1]=time_counter_M;
+	   }
+	   time_display_flag=1;
+	}
+    for(i=0;i<7;i++)                    //读取时间
+	{ 
+	   time[i]=TWI_Read(WD_DS1307_ADDR,RD_DS1307_ADDR,i);
+	   delay_nus(10);
+	   alarm_1[i]=time[i];
+	}
+
+	
+	if(alarm_open)                      //闹钟开启标志位
+	{
+	for(i=0;i<8;i++)                    //读取时间
+	{ 
+	  
+	}
+	
+	
+	if(alarm_flag)                    //闹钟开启
+	{
+	   DDRA|=BIT(7);
+	   PORTA|=BIT(7);
+	   clock_close=1;
+	   alarm_open=0;
+	}
+	}
+	
+	if(clock_close)                  //闹钟计时关闭
+	{
+	   clock_close_counter++;
+	   if(clock_close_counter==62)
+	   {
+	      PORTA&=~BIT(7);
+		  clock_close_counter=0;
+		  clock_close=0;
+		  alarm_flag=0;
+	   }
+	}
+
+	GICR |= (1<<INT2);			//下降沿触发INT2
+}

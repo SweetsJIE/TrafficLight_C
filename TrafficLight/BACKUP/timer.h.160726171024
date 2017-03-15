@@ -1,0 +1,6 @@
+#include<iom16v.h>
+
+extern unsigned char sec = 0;
+
+void timer1_init();
+void Int_TCCR1A();

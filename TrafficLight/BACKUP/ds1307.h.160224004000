@@ -1,0 +1,18 @@
+
+#ifndef _DS1307_H
+#define _DS1307_H
+
+extern uchar time_counter_S;
+extern uchar time_counter_M;
+extern uchar time_buffer[2];
+extern uchar watch_flag;
+extern uchar time_display_flag;
+extern uchar alarm_open,clock_open;
+extern uchar time[7];
+extern uchar alarm[6],alarm_buffer[];
+
+void int2_init(void);
+void time_show(void);
+
+
+#endif

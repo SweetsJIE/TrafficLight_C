@@ -1,0 +1,136 @@
+                        .module eeprom.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile eeprom.c
+ 0000                   .dbfile C:\Users\Administrator\Desktop\交通灯\eeprom.c
+ 0000                   .dbfunc e Read_EEprom _Read_EEprom fc
+ 0000           ;              j -> R10
+ 0000           ;        address -> R20,R21
+                        .even
+ 0000           _Read_EEprom::
+ 0000 0E940000          xcall push_xgset300C
+ 0004 A801              movw R20,R16
+ 0006                   .dbline -1
+ 0006                   .dbline 14
+ 0006           ; /********************************************************************
+ 0006           ;             对ATMEGA16内部e2prom进行读写操作
+ 0006           ; ********************************************************************/
+ 0006           ; #include <iom16v.h>
+ 0006           ; #include<macros.h>
+ 0006           ; #include"eeprom.h"
+ 0006           ; #include"delay.h"
+ 0006           ;         
+ 0006           ; 
+ 0006           ; /******************************************************************************/
+ 0006           ; //读内部EEPROM函数
+ 0006           ; /******************************************************************************/                               
+ 0006           ; uchar Read_EEprom(uint address)
+ 0006           ; {
+ 0006                   .dbline 16
+ 0006           ;     uchar j;
+ 0006           ;       if(EECR&0x01)delay_nms(32);
+ 0006 E09B              sbis 0x1c,0
+ 0008 04C0              rjmp L2
+ 000A           X0:
+ 000A                   .dbline 16
+ 000A 00E2              ldi R16,32
+ 000C 10E0              ldi R17,0
+ 000E 0E940000          xcall _delay_nms
+ 0012           L2:
+ 0012                   .dbline 17
+ 0012           ;       EEARH=address&0x0100;
+ 0012 CA01              movw R24,R20
+ 0014 8070              andi R24,0
+ 0016 9170              andi R25,1
+ 0018 8FBB              out 0x1f,R24
+ 001A                   .dbline 18
+ 001A           ;       EEARL=address&0x00ff;
+ 001A CA01              movw R24,R20
+ 001C 9070              andi R25,0
+ 001E 8EBB              out 0x1e,R24
+ 0020                   .dbline 19
+ 0020           ;       EECR|=0x01;       //EEPROM 读使能
+ 0020 E09A              sbi 0x1c,0
+ 0022                   .dbline 20
+ 0022           ;       delay_nms(32);
+ 0022 00E2              ldi R16,32
+ 0024 10E0              ldi R17,0
+ 0026 0E940000          xcall _delay_nms
+ 002A                   .dbline 21
+ 002A           ;       j=EEDR;      //读取数据
+ 002A ADB2              in R10,0x1d
+ 002C                   .dbline 22
+ 002C           ;       return(j);
+ 002C 0A2D              mov R16,R10
+ 002E                   .dbline -2
+ 002E           L1:
+ 002E                   .dbline 0 ; func end
+ 002E 0C940000          xjmp pop_xgset300C
+ 0032                   .dbsym r j 10 c
+ 0032                   .dbsym r address 20 i
+ 0032                   .dbend
+ 0032                   .dbfunc e Write_EEprom _Write_EEprom fV
+ 0032           ;        address -> R20,R21
+ 0032           ;           data -> R10
+                        .even
+ 0032           _Write_EEprom::
+ 0032 0E940000          xcall push_xgset300C
+ 0036 A901              movw R20,R18
+ 0038 A02E              mov R10,R16
+ 003A                   .dbline -1
+ 003A                   .dbline 28
+ 003A           ; }
+ 003A           ; /******************************************************************************/
+ 003A           ; //写入EEPORM函数
+ 003A           ; /******************************************************************************/                                
+ 003A           ; void Write_EEprom(uchar data,uint address)
+ 003A           ; {
+ 003A                   .dbline 29
+ 003A           ;       EEARH=address&0x0100;
+ 003A CA01              movw R24,R20
+ 003C 8070              andi R24,0
+ 003E 9170              andi R25,1
+ 0040 8FBB              out 0x1f,R24
+ 0042                   .dbline 30
+ 0042           ;       EEARL=address&0x00ff; 
+ 0042 CA01              movw R24,R20
+ 0044 9070              andi R25,0
+ 0046 8EBB              out 0x1e,R24
+ 0048                   .dbline 31
+ 0048           ;       EEDR=data;    //写入数据
+ 0048 ADBA              out 0x1d,R10
+ 004A                   .dbline 32
+ 004A           ;       EECR|=0x04;   //EEPROM 主机写使能
+ 004A E29A              sbi 0x1c,2
+ 004C                   .dbline 33
+ 004C           ;     EECR|=0x02;   //EEPROM 写使能
+ 004C E19A              sbi 0x1c,1
+ 004E                   .dbline 34
+ 004E           ;       delay_nms(32);
+ 004E 00E2              ldi R16,32
+ 0050 10E0              ldi R17,0
+ 0052 0E940000          xcall _delay_nms
+ 0056                   .dbline -2
+ 0056           L4:
+ 0056                   .dbline 0 ; func end
+ 0056 0C940000          xjmp pop_xgset300C
+ 005A                   .dbsym r address 20 i
+ 005A                   .dbsym r data 10 c
+ 005A                   .dbend
+ 005A           ; }
+ 005A           ; 
+ 005A           ;                               
+ 005A           ;                                      
+ 005A           ;                        
+ 005A           ;                             
+ 005A           ;                
+ 005A           ;                 
+ 005A           ; 
+ 005A           ; 
+ 005A           ;    
+ 005A           ;                       
+ 005A           ;                        
+ 005A           ;                             
+ 005A           ;                
+ 005A           ;                 
+ 005A           ; 
+ 005A           ; 

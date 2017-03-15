@@ -1,0 +1,8 @@
+#include<iom16v.h>
+
+void main()
+{
+  Init_MAX7219();
+  timer1_init();
+  Int0_button_init();
+}
