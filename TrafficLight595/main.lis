@@ -1,0 +1,908 @@
+                        .module main.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile main.c
+                        .area data(ram, con, rel)
+ 0000                   .dbfile main.c
+ 0000           _count::
+ 0000                   .blkb 1
+                        .area idata
+ 0000 00                .byte 0
+                        .area data(ram, con, rel)
+ 0001                   .dbfile main.c
+ 0001                   .dbfile C:\Users\Administrator\Desktop\TrafficLight595\main.c
+ 0001                   .dbsym e count _count c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile C:\Users\Administrator\Desktop\TrafficLight595\main.c
+ 0000                   .dbfunc e io_init _io_init fV
+                        .even
+ 0000           _io_init::
+ 0000                   .dbline -1
+ 0000                   .dbline 16
+ 0000           ; #include<iom16v.h>
+ 0000           ; #include<macros.h>
+ 0000           ; #include"MAX7219.h"
+ 0000           ; #include"74LS139.h"
+ 0000           ; #include"button.h"
+ 0000           ; #include"delay.h"
+ 0000           ; #include"ds1307.h"
+ 0000           ; #include"twi.h"
+ 0000           ; #include"usart.h"
+ 0000           ; #include"HC_595.h"
+ 0000           ; 
+ 0000           ; uchar Number_H,Number_L,count=0;
+ 0000           ; 
+ 0000           ; 
+ 0000           ; void io_init()
+ 0000           ; {
+ 0000                   .dbline 17
+ 0000           ;   DDRA=0xFF;
+ 0000 8FEF              ldi R24,255
+ 0002 8ABB              out 0x1a,R24
+ 0004                   .dbline 18
+ 0004           ;   PORTA=0x00;
+ 0004 2224              clr R2
+ 0006 2BBA              out 0x1b,R2
+ 0008                   .dbline 19
+ 0008           ;   DDRB=0xff;
+ 0008 87BB              out 0x17,R24
+ 000A                   .dbline 20
+ 000A           ;   PORTB=0xff;
+ 000A 88BB              out 0x18,R24
+ 000C                   .dbline 21
+ 000C           ;   DDRC=0xe7;
+ 000C 87EE              ldi R24,231
+ 000E 84BB              out 0x14,R24
+ 0010                   .dbline 22
+ 0010           ;   PORTC=0x00;
+ 0010 25BA              out 0x15,R2
+ 0012                   .dbline 23
+ 0012           ;   DDRD=0x02;
+ 0012 82E0              ldi R24,2
+ 0014 81BB              out 0x11,R24
+ 0016                   .dbline 24
+ 0016           ;   PORTD=0x04;
+ 0016 84E0              ldi R24,4
+ 0018 82BB              out 0x12,R24
+ 001A                   .dbline -2
+ 001A           L1:
+ 001A                   .dbline 0 ; func end
+ 001A 0895              ret
+ 001C                   .dbend
+ 001C                   .dbfunc e main _main fV
+                        .even
+ 001C           _main::
+ 001C 2197              sbiw R28,1
+ 001E                   .dbline -1
+ 001E                   .dbline 28
+ 001E           ; }
+ 001E           ; 
+ 001E           ; void main()
+ 001E           ; {
+ 001E                   .dbline 29
+ 001E           ;   io_init();
+ 001E F0DF              xcall _io_init
+ 0020                   .dbline 30
+ 0020           ;   TWI_init();
+ 0020 0E940000          xcall _TWI_init
+ 0024                   .dbline 31
+ 0024           ;   TWI_Write(WD_DS1307_ADDR,0X10,7);           //设置ds1307输出方波
+ 0024 87E0              ldi R24,7
+ 0026 8883              std y+0,R24
+ 0028 20E1              ldi R18,16
+ 002A 00ED              ldi R16,208
+ 002C 0E940000          xcall _TWI_Write
+ 0030                   .dbline 32
+ 0030           ;   int2_init();
+ 0030 0E940000          xcall _int2_init
+ 0034                   .dbline 33
+ 0034           ;   usart_init();
+ 0034 0E940000          xcall _usart_init
+ 0038                   .dbline 34
+ 0038           ;   HC_595_init();
+ 0038 0E940000          xcall _HC_595_init
+ 003C                   .dbline 36
+ 003C           ;   
+ 003C           ;   redTime = Read_EEprom(5);      //读取红绿黄灯的时间
+ 003C 05E0              ldi R16,5
+ 003E 10E0              ldi R17,0
+ 0040 0E940000          xcall _Read_EEprom
+ 0044 00930000          sts _redTime,R16
+ 0048                   .dbline 37
+ 0048           ;   greenTime = Read_EEprom(6);
+ 0048 06E0              ldi R16,6
+ 004A 10E0              ldi R17,0
+ 004C 0E940000          xcall _Read_EEprom
+ 0050 00930000          sts _greenTime,R16
+ 0054                   .dbline 38
+ 0054           ;   yellowTime = Read_EEprom(7);
+ 0054 07E0              ldi R16,7
+ 0056 10E0              ldi R17,0
+ 0058 0E940000          xcall _Read_EEprom
+ 005C 5801              movw R10,R16
+ 005E A0920000          sts _yellowTime,R10
+ 0062                   .dbline 41
+ 0062           ;   
+ 0062           ;   
+ 0062           ;   SREG|=BIT(7);
+ 0062 7894              bset 7
+ 0064 51C2              xjmp L4
+ 0066           L3:
+ 0066                   .dbline 54
+ 0066           ;   
+ 0066           ;   //修改时间
+ 0066           ;   /*
+ 0066           ;   TWI_Write(WD_DS1307_ADDR,00,0);
+ 0066           ;   TWI_Write(WD_DS1307_ADDR,21,1);
+ 0066           ;   TWI_Write(WD_DS1307_ADDR,14,2);
+ 0066           ;   TWI_Write(WD_DS1307_ADDR,17,4);
+ 0066           ;   TWI_Write(WD_DS1307_ADDR,03,5);
+ 0066           ;   TWI_Write(WD_DS1307_ADDR,17,6);
+ 0066           ;   */
+ 0066           ; 
+ 0066           ;   while(1)
+ 0066           ;   {
+ 0066                   .dbline 55
+ 0066           ;     if(daytimeFlag)
+ 0066 20900000          lds R2,_daytimeFlag
+ 006A 2220              tst R2
+ 006C 09F4              brne X21
+ 006E 01C2              xjmp L6
+ 0070           X21:
+ 0070           X0:
+ 0070                   .dbline 56
+ 0070           ;       {
+ 0070                   .dbline 57
+ 0070           ;         LS139_G_L;
+ 0070 DC98              cbi 0x1b,4
+ 0072                   .dbline 58
+ 0072           ;         GICR |= (1<<INT2);                    //打开外部中断2
+ 0072 8BB7              in R24,0x3b
+ 0074 8062              ori R24,32
+ 0076 8BBF              out 0x3b,R24
+ 0078 49C0              xjmp L9
+ 007A           L8:
+ 007A                   .dbline 60
+ 007A           ;         while(secCount<=greenTime)
+ 007A           ;         {
+ 007A                   .dbline 61
+ 007A           ;           if(urgencyFlag || nightFlag)break;
+ 007A 20900000          lds R2,_urgencyFlag
+ 007E 2220              tst R2
+ 0080 21F4              brne L13
+ 0082           X1:
+ 0082 20900000          lds R2,_nightFlag
+ 0086 2220              tst R2
+ 0088 09F0              breq L11
+ 008A           X2:
+ 008A           L13:
+ 008A                   .dbline 61
+ 008A A8C0              xjmp L15
+ 008C           L11:
+ 008C                   .dbline 62
+ 008C           ;           Write_Data(1,decode_H(greenTime-secCount));
+ 008C 20900000          lds R2,_secCount
+ 0090 3324              clr R3
+ 0092 00910000          lds R16,_greenTime
+ 0096 1127              clr R17
+ 0098 0219              sub R16,R2
+ 009A 1309              sbc R17,R3
+ 009C 38D2              xcall _decode_H
+ 009E 5801              movw R10,R16
+ 00A0 9501              movw R18,R10
+ 00A2 01E0              ldi R16,1
+ 00A4 10E0              ldi R17,0
+ 00A6 0E940000          xcall _Write_Data
+ 00AA                   .dbline 63
+ 00AA           ;         Write_Data(2,decode_L(greenTime-secCount));
+ 00AA 20900000          lds R2,_secCount
+ 00AE 3324              clr R3
+ 00B0 00910000          lds R16,_greenTime
+ 00B4 1127              clr R17
+ 00B6 0219              sub R16,R2
+ 00B8 1309              sbc R17,R3
+ 00BA 33D2              xcall _decode_L
+ 00BC 5801              movw R10,R16
+ 00BE 9501              movw R18,R10
+ 00C0 02E0              ldi R16,2
+ 00C2 10E0              ldi R17,0
+ 00C4 0E940000          xcall _Write_Data
+ 00C8                   .dbline 64
+ 00C8           ;               Write_Data(3,decode_H(greenTime-secCount));
+ 00C8 20900000          lds R2,_secCount
+ 00CC 3324              clr R3
+ 00CE 00910000          lds R16,_greenTime
+ 00D2 1127              clr R17
+ 00D4 0219              sub R16,R2
+ 00D6 1309              sbc R17,R3
+ 00D8 1AD2              xcall _decode_H
+ 00DA 5801              movw R10,R16
+ 00DC 9501              movw R18,R10
+ 00DE 03E0              ldi R16,3
+ 00E0 10E0              ldi R17,0
+ 00E2 0E940000          xcall _Write_Data
+ 00E6                   .dbline 65
+ 00E6           ;         Write_Data(4,decode_L(greenTime-secCount));
+ 00E6 20900000          lds R2,_secCount
+ 00EA 3324              clr R3
+ 00EC 00910000          lds R16,_greenTime
+ 00F0 1127              clr R17
+ 00F2 0219              sub R16,R2
+ 00F4 1309              sbc R17,R3
+ 00F6 15D2              xcall _decode_L
+ 00F8 5801              movw R10,R16
+ 00FA 9501              movw R18,R10
+ 00FC 04E0              ldi R16,4
+ 00FE 10E0              ldi R17,0
+ 0100 0E940000          xcall _Write_Data
+ 0104                   .dbline 66
+ 0104           ;               main_green();
+ 0104 0E940000          xcall _main_green
+ 0108                   .dbline 67
+ 0108           ;               second_red();
+ 0108 0E940000          xcall _second_red
+ 010C                   .dbline 68
+ 010C           ;         }
+ 010C           L9:
+ 010C                   .dbline 59
+ 010C 20900000          lds R2,_greenTime
+ 0110 3324              clr R3
+ 0112 40900000          lds R4,_secCount
+ 0116 5524              clr R5
+ 0118 2414              cp R2,R4
+ 011A 3504              cpc R3,R5
+ 011C 0CF0              brlt X22
+ 011E ADCF              xjmp L8
+ 0120           X22:
+ 0120           X3:
+ 0120 5DC0              xjmp L15
+ 0122           L14:
+ 0122                   .dbline 70
+ 0122           ;         while(secCount>greenTime&&secCount<=(greenTime+yellowTime))
+ 0122           ;         {
+ 0122                   .dbline 71
+ 0122           ;           if(urgencyFlag || nightFlag)break;
+ 0122 20900000          lds R2,_urgencyFlag
+ 0126 2220              tst R2
+ 0128 21F4              brne L19
+ 012A           X4:
+ 012A 20900000          lds R2,_nightFlag
+ 012E 2220              tst R2
+ 0130 09F0              breq L17
+ 0132           X5:
+ 0132           L19:
+ 0132                   .dbline 71
+ 0132 DEC0              xjmp L22
+ 0134           L17:
+ 0134                   .dbline 72
+ 0134           ;           Write_Data(1,decode_H(greenTime+yellowTime-secCount));
+ 0134 20900000          lds R2,_yellowTime
+ 0138 3324              clr R3
+ 013A 00910000          lds R16,_greenTime
+ 013E 1127              clr R17
+ 0140 020D              add R16,R2
+ 0142 131D              adc R17,R3
+ 0144 20900000          lds R2,_secCount
+ 0148 3324              clr R3
+ 014A 0219              sub R16,R2
+ 014C 1309              sbc R17,R3
+ 014E DFD1              xcall _decode_H
+ 0150 5801              movw R10,R16
+ 0152 9501              movw R18,R10
+ 0154 01E0              ldi R16,1
+ 0156 10E0              ldi R17,0
+ 0158 0E940000          xcall _Write_Data
+ 015C                   .dbline 73
+ 015C           ;         Write_Data(2,decode_L(greenTime+yellowTime-secCount));
+ 015C 20900000          lds R2,_yellowTime
+ 0160 3324              clr R3
+ 0162 00910000          lds R16,_greenTime
+ 0166 1127              clr R17
+ 0168 020D              add R16,R2
+ 016A 131D              adc R17,R3
+ 016C 20900000          lds R2,_secCount
+ 0170 3324              clr R3
+ 0172 0219              sub R16,R2
+ 0174 1309              sbc R17,R3
+ 0176 D5D1              xcall _decode_L
+ 0178 5801              movw R10,R16
+ 017A 9501              movw R18,R10
+ 017C 02E0              ldi R16,2
+ 017E 10E0              ldi R17,0
+ 0180 0E940000          xcall _Write_Data
+ 0184                   .dbline 74
+ 0184           ;               Write_Data(3,decode_H(greenTime+yellowTime-secCount));
+ 0184 20900000          lds R2,_yellowTime
+ 0188 3324              clr R3
+ 018A 00910000          lds R16,_greenTime
+ 018E 1127              clr R17
+ 0190 020D              add R16,R2
+ 0192 131D              adc R17,R3
+ 0194 20900000          lds R2,_secCount
+ 0198 3324              clr R3
+ 019A 0219              sub R16,R2
+ 019C 1309              sbc R17,R3
+ 019E B7D1              xcall _decode_H
+ 01A0 5801              movw R10,R16
+ 01A2 9501              movw R18,R10
+ 01A4 03E0              ldi R16,3
+ 01A6 10E0              ldi R17,0
+ 01A8 0E940000          xcall _Write_Data
+ 01AC                   .dbline 75
+ 01AC           ;         Write_Data(4,decode_L(greenTime+yellowTime-secCount));
+ 01AC 20900000          lds R2,_yellowTime
+ 01B0 3324              clr R3
+ 01B2 00910000          lds R16,_greenTime
+ 01B6 1127              clr R17
+ 01B8 020D              add R16,R2
+ 01BA 131D              adc R17,R3
+ 01BC 20900000          lds R2,_secCount
+ 01C0 3324              clr R3
+ 01C2 0219              sub R16,R2
+ 01C4 1309              sbc R17,R3
+ 01C6 ADD1              xcall _decode_L
+ 01C8 5801              movw R10,R16
+ 01CA 9501              movw R18,R10
+ 01CC 04E0              ldi R16,4
+ 01CE 10E0              ldi R17,0
+ 01D0 0E940000          xcall _Write_Data
+ 01D4                   .dbline 76
+ 01D4           ;               main_yellow();
+ 01D4 0E940000          xcall _main_yellow
+ 01D8                   .dbline 77
+ 01D8           ;               second_yellow();
+ 01D8 0E940000          xcall _second_yellow
+ 01DC                   .dbline 78
+ 01DC           ;         }
+ 01DC           L15:
+ 01DC                   .dbline 69
+ 01DC A0900000          lds R10,_secCount
+ 01E0 C0900000          lds R12,_greenTime
+ 01E4 2C2C              mov R2,R12
+ 01E6 3324              clr R3
+ 01E8 4A2C              mov R4,R10
+ 01EA 5524              clr R5
+ 01EC 2414              cp R2,R4
+ 01EE 3504              cpc R3,R5
+ 01F0 6CF4              brge L20
+ 01F2           X6:
+ 01F2 20900000          lds R2,_yellowTime
+ 01F6 3324              clr R3
+ 01F8 4C2C              mov R4,R12
+ 01FA 5524              clr R5
+ 01FC 420C              add R4,R2
+ 01FE 531C              adc R5,R3
+ 0200 2A2C              mov R2,R10
+ 0202 3324              clr R3
+ 0204 4214              cp R4,R2
+ 0206 5304              cpc R5,R3
+ 0208 0CF0              brlt X23
+ 020A 8BCF              xjmp L14
+ 020C           X23:
+ 020C           X7:
+ 020C           L20:
+ 020C 71C0              xjmp L22
+ 020E           L21:
+ 020E                   .dbline 80
+ 020E           ;         while(secCount>(greenTime+yellowTime)&&secCount<=(greenTime+yellowTime+redTime))
+ 020E           ;         {
+ 020E                   .dbline 81
+ 020E           ;           if(urgencyFlag || nightFlag)break;
+ 020E 20900000          lds R2,_urgencyFlag
+ 0212 2220              tst R2
+ 0214 21F4              brne L26
+ 0216           X8:
+ 0216 20900000          lds R2,_nightFlag
+ 021A 2220              tst R2
+ 021C 09F0              breq L24
+ 021E           X9:
+ 021E           L26:
+ 021E                   .dbline 81
+ 021E 09C1              xjmp L29
+ 0220           L24:
+ 0220                   .dbline 82
+ 0220           ;           Write_Data(1,decode_H(greenTime+yellowTime+redTime-secCount));
+ 0220 20900000          lds R2,_yellowTime
+ 0224 3324              clr R3
+ 0226 00910000          lds R16,_greenTime
+ 022A 1127              clr R17
+ 022C 020D              add R16,R2
+ 022E 131D              adc R17,R3
+ 0230 20900000          lds R2,_redTime
+ 0234 3324              clr R3
+ 0236 020D              add R16,R2
+ 0238 131D              adc R17,R3
+ 023A 20900000          lds R2,_secCount
+ 023E 3324              clr R3
+ 0240 0219              sub R16,R2
+ 0242 1309              sbc R17,R3
+ 0244 64D1              xcall _decode_H
+ 0246 5801              movw R10,R16
+ 0248 9501              movw R18,R10
+ 024A 01E0              ldi R16,1
+ 024C 10E0              ldi R17,0
+ 024E 0E940000          xcall _Write_Data
+ 0252                   .dbline 83
+ 0252           ;         Write_Data(2,decode_L(greenTime+yellowTime+redTime-secCount));
+ 0252 20900000          lds R2,_yellowTime
+ 0256 3324              clr R3
+ 0258 00910000          lds R16,_greenTime
+ 025C 1127              clr R17
+ 025E 020D              add R16,R2
+ 0260 131D              adc R17,R3
+ 0262 20900000          lds R2,_redTime
+ 0266 3324              clr R3
+ 0268 020D              add R16,R2
+ 026A 131D              adc R17,R3
+ 026C 20900000          lds R2,_secCount
+ 0270 3324              clr R3
+ 0272 0219              sub R16,R2
+ 0274 1309              sbc R17,R3
+ 0276 55D1              xcall _decode_L
+ 0278 5801              movw R10,R16
+ 027A 9501              movw R18,R10
+ 027C 02E0              ldi R16,2
+ 027E 10E0              ldi R17,0
+ 0280 0E940000          xcall _Write_Data
+ 0284                   .dbline 84
+ 0284           ;               Write_Data(3,decode_H(greenTime+yellowTime+redTime-secCount));
+ 0284 20900000          lds R2,_yellowTime
+ 0288 3324              clr R3
+ 028A 00910000          lds R16,_greenTime
+ 028E 1127              clr R17
+ 0290 020D              add R16,R2
+ 0292 131D              adc R17,R3
+ 0294 20900000          lds R2,_redTime
+ 0298 3324              clr R3
+ 029A 020D              add R16,R2
+ 029C 131D              adc R17,R3
+ 029E 20900000          lds R2,_secCount
+ 02A2 3324              clr R3
+ 02A4 0219              sub R16,R2
+ 02A6 1309              sbc R17,R3
+ 02A8 32D1              xcall _decode_H
+ 02AA 5801              movw R10,R16
+ 02AC 9501              movw R18,R10
+ 02AE 03E0              ldi R16,3
+ 02B0 10E0              ldi R17,0
+ 02B2 0E940000          xcall _Write_Data
+ 02B6                   .dbline 85
+ 02B6           ;         Write_Data(4,decode_L(greenTime+yellowTime+redTime-secCount));
+ 02B6 20900000          lds R2,_yellowTime
+ 02BA 3324              clr R3
+ 02BC 00910000          lds R16,_greenTime
+ 02C0 1127              clr R17
+ 02C2 020D              add R16,R2
+ 02C4 131D              adc R17,R3
+ 02C6 20900000          lds R2,_redTime
+ 02CA 3324              clr R3
+ 02CC 020D              add R16,R2
+ 02CE 131D              adc R17,R3
+ 02D0 20900000          lds R2,_secCount
+ 02D4 3324              clr R3
+ 02D6 0219              sub R16,R2
+ 02D8 1309              sbc R17,R3
+ 02DA 23D1              xcall _decode_L
+ 02DC 5801              movw R10,R16
+ 02DE 9501              movw R18,R10
+ 02E0 04E0              ldi R16,4
+ 02E2 10E0              ldi R17,0
+ 02E4 0E940000          xcall _Write_Data
+ 02E8                   .dbline 86
+ 02E8           ;               main_red();
+ 02E8 0E940000          xcall _main_red
+ 02EC                   .dbline 87
+ 02EC           ;               second_green();
+ 02EC 0E940000          xcall _second_green
+ 02F0                   .dbline 88
+ 02F0           ;         }
+ 02F0           L22:
+ 02F0                   .dbline 79
+ 02F0 A0900000          lds R10,_secCount
+ 02F4 20900000          lds R2,_yellowTime
+ 02F8 3324              clr R3
+ 02FA C0900000          lds R12,_greenTime
+ 02FE DD24              clr R13
+ 0300 C20C              add R12,R2
+ 0302 D31C              adc R13,R3
+ 0304 2A2C              mov R2,R10
+ 0306 3324              clr R3
+ 0308 C214              cp R12,R2
+ 030A D304              cpc R13,R3
+ 030C 64F4              brge L27
+ 030E           X10:
+ 030E 20900000          lds R2,_redTime
+ 0312 3324              clr R3
+ 0314 2601              movw R4,R12
+ 0316 420C              add R4,R2
+ 0318 531C              adc R5,R3
+ 031A 2A2C              mov R2,R10
+ 031C 3324              clr R3
+ 031E 4214              cp R4,R2
+ 0320 5304              cpc R5,R3
+ 0322 0CF0              brlt X24
+ 0324 74CF              xjmp L21
+ 0326           X24:
+ 0326           X11:
+ 0326           L27:
+ 0326 85C0              xjmp L29
+ 0328           L28:
+ 0328                   .dbline 90
+ 0328           ;         while(secCount>(greenTime+yellowTime+redTime)&&secCount<=(greenTime+yellowTime+redTime+yellowTime))
+ 0328           ;         {
+ 0328                   .dbline 91
+ 0328           ;           if(urgencyFlag ||nightFlag)break;
+ 0328 20900000          lds R2,_urgencyFlag
+ 032C 2220              tst R2
+ 032E 21F4              brne L33
+ 0330           X12:
+ 0330 20900000          lds R2,_nightFlag
+ 0334 2220              tst R2
+ 0336 09F0              breq L31
+ 0338           X13:
+ 0338           L33:
+ 0338                   .dbline 91
+ 0338 9CC0              xjmp L30
+ 033A           L31:
+ 033A                   .dbline 92
+ 033A           ;           Write_Data(1,decode_H(greenTime+yellowTime+redTime+yellowTime-secCount));
+ 033A A0900000          lds R10,_yellowTime
+ 033E 2A2C              mov R2,R10
+ 0340 3324              clr R3
+ 0342 00910000          lds R16,_greenTime
+ 0346 1127              clr R17
+ 0348 020D              add R16,R2
+ 034A 131D              adc R17,R3
+ 034C 20900000          lds R2,_redTime
+ 0350 3324              clr R3
+ 0352 020D              add R16,R2
+ 0354 131D              adc R17,R3
+ 0356 2A2C              mov R2,R10
+ 0358 3324              clr R3
+ 035A 020D              add R16,R2
+ 035C 131D              adc R17,R3
+ 035E 20900000          lds R2,_secCount
+ 0362 3324              clr R3
+ 0364 0219              sub R16,R2
+ 0366 1309              sbc R17,R3
+ 0368 D2D0              xcall _decode_H
+ 036A 5801              movw R10,R16
+ 036C 9501              movw R18,R10
+ 036E 01E0              ldi R16,1
+ 0370 10E0              ldi R17,0
+ 0372 0E940000          xcall _Write_Data
+ 0376                   .dbline 93
+ 0376           ;         Write_Data(2,decode_L(greenTime+yellowTime+redTime+yellowTime-secCount));
+ 0376 A0900000          lds R10,_yellowTime
+ 037A 2A2C              mov R2,R10
+ 037C 3324              clr R3
+ 037E 00910000          lds R16,_greenTime
+ 0382 1127              clr R17
+ 0384 020D              add R16,R2
+ 0386 131D              adc R17,R3
+ 0388 20900000          lds R2,_redTime
+ 038C 3324              clr R3
+ 038E 020D              add R16,R2
+ 0390 131D              adc R17,R3
+ 0392 2A2C              mov R2,R10
+ 0394 3324              clr R3
+ 0396 020D              add R16,R2
+ 0398 131D              adc R17,R3
+ 039A 20900000          lds R2,_secCount
+ 039E 3324              clr R3
+ 03A0 0219              sub R16,R2
+ 03A2 1309              sbc R17,R3
+ 03A4 BED0              xcall _decode_L
+ 03A6 5801              movw R10,R16
+ 03A8 9501              movw R18,R10
+ 03AA 02E0              ldi R16,2
+ 03AC 10E0              ldi R17,0
+ 03AE 0E940000          xcall _Write_Data
+ 03B2                   .dbline 94
+ 03B2           ;               Write_Data(3,decode_H(greenTime+yellowTime+redTime+yellowTime-secCount));
+ 03B2 A0900000          lds R10,_yellowTime
+ 03B6 2A2C              mov R2,R10
+ 03B8 3324              clr R3
+ 03BA 00910000          lds R16,_greenTime
+ 03BE 1127              clr R17
+ 03C0 020D              add R16,R2
+ 03C2 131D              adc R17,R3
+ 03C4 20900000          lds R2,_redTime
+ 03C8 3324              clr R3
+ 03CA 020D              add R16,R2
+ 03CC 131D              adc R17,R3
+ 03CE 2A2C              mov R2,R10
+ 03D0 3324              clr R3
+ 03D2 020D              add R16,R2
+ 03D4 131D              adc R17,R3
+ 03D6 20900000          lds R2,_secCount
+ 03DA 3324              clr R3
+ 03DC 0219              sub R16,R2
+ 03DE 1309              sbc R17,R3
+ 03E0 96D0              xcall _decode_H
+ 03E2 5801              movw R10,R16
+ 03E4 9501              movw R18,R10
+ 03E6 03E0              ldi R16,3
+ 03E8 10E0              ldi R17,0
+ 03EA 0E940000          xcall _Write_Data
+ 03EE                   .dbline 95
+ 03EE           ;         Write_Data(4,decode_L(greenTime+yellowTime+redTime+yellowTime-secCount));
+ 03EE A0900000          lds R10,_yellowTime
+ 03F2 2A2C              mov R2,R10
+ 03F4 3324              clr R3
+ 03F6 00910000          lds R16,_greenTime
+ 03FA 1127              clr R17
+ 03FC 020D              add R16,R2
+ 03FE 131D              adc R17,R3
+ 0400 20900000          lds R2,_redTime
+ 0404 3324              clr R3
+ 0406 020D              add R16,R2
+ 0408 131D              adc R17,R3
+ 040A 2A2C              mov R2,R10
+ 040C 3324              clr R3
+ 040E 020D              add R16,R2
+ 0410 131D              adc R17,R3
+ 0412 20900000          lds R2,_secCount
+ 0416 3324              clr R3
+ 0418 0219              sub R16,R2
+ 041A 1309              sbc R17,R3
+ 041C 82D0              xcall _decode_L
+ 041E 5801              movw R10,R16
+ 0420 9501              movw R18,R10
+ 0422 04E0              ldi R16,4
+ 0424 10E0              ldi R17,0
+ 0426 0E940000          xcall _Write_Data
+ 042A                   .dbline 96
+ 042A           ;               main_yellow();
+ 042A 0E940000          xcall _main_yellow
+ 042E                   .dbline 97
+ 042E           ;               second_yellow();
+ 042E 0E940000          xcall _second_yellow
+ 0432                   .dbline 98
+ 0432           ;         }
+ 0432           L29:
+ 0432                   .dbline 89
+ 0432 A0900000          lds R10,_secCount
+ 0436 E0900000          lds R14,_yellowTime
+ 043A 2E2C              mov R2,R14
+ 043C 3324              clr R3
+ 043E C0900000          lds R12,_greenTime
+ 0442 DD24              clr R13
+ 0444 C20C              add R12,R2
+ 0446 D31C              adc R13,R3
+ 0448 20900000          lds R2,_redTime
+ 044C 3324              clr R3
+ 044E C20C              add R12,R2
+ 0450 D31C              adc R13,R3
+ 0452 2A2C              mov R2,R10
+ 0454 3324              clr R3
+ 0456 C214              cp R12,R2
+ 0458 D304              cpc R13,R3
+ 045A 5CF4              brge L34
+ 045C           X14:
+ 045C 2E2C              mov R2,R14
+ 045E 3324              clr R3
+ 0460 2601              movw R4,R12
+ 0462 420C              add R4,R2
+ 0464 531C              adc R5,R3
+ 0466 2A2C              mov R2,R10
+ 0468 3324              clr R3
+ 046A 4214              cp R4,R2
+ 046C 5304              cpc R5,R3
+ 046E 0CF0              brlt X25
+ 0470 5BCF              xjmp L28
+ 0472           X25:
+ 0472           X15:
+ 0472           L34:
+ 0472           L30:
+ 0472                   .dbline 99
+ 0472           ;       }
+ 0472           L6:
+ 0472                   .dbline 101
+ 0472           ;       
+ 0472           ;       if(nightFlag)            //夜间模式
+ 0472 20900000          lds R2,_nightFlag
+ 0476 2220              tst R2
+ 0478 E1F0              breq L35
+ 047A           X16:
+ 047A                   .dbline 102
+ 047A           ;       { 
+ 047A                   .dbline 104
+ 047A           ;         //Write_Max7219(0x0c, 0x00);
+ 047A           ;         Drive_HC595(0x00,0);
+ 047A 2227              clr R18
+ 047C 3327              clr R19
+ 047E 0027              clr R16
+ 0480 1127              clr R17
+ 0482 0E940000          xcall _Drive_HC595
+ 0486                   .dbline 105
+ 0486           ;         Drive_HC595(0x00,1);
+ 0486 21E0              ldi R18,1
+ 0488 30E0              ldi R19,0
+ 048A 0027              clr R16
+ 048C 1127              clr R17
+ 048E 0E940000          xcall _Drive_HC595
+ 0492                   .dbline 106
+ 0492           ;         main_yellow();
+ 0492 0E940000          xcall _main_yellow
+ 0496                   .dbline 107
+ 0496           ;         second_yellow();
+ 0496 0E940000          xcall _second_yellow
+ 049A                   .dbline 108
+ 049A           ;         delay_nms(500);
+ 049A 04EF              ldi R16,500
+ 049C 11E0              ldi R17,1
+ 049E 0E940000          xcall _delay_nms
+ 04A2                   .dbline 109
+ 04A2           ;         main_close();
+ 04A2 0E940000          xcall _main_close
+ 04A6                   .dbline 110
+ 04A6           ;         second_close();
+ 04A6 0E940000          xcall _second_close
+ 04AA                   .dbline 111
+ 04AA           ;         delay_nms(500);
+ 04AA 04EF              ldi R16,500
+ 04AC 11E0              ldi R17,1
+ 04AE 0E940000          xcall _delay_nms
+ 04B2                   .dbline 112
+ 04B2           ;       }
+ 04B2           L35:
+ 04B2                   .dbline 114
+ 04B2           ;       
+ 04B2           ;       if(urgencyFlag)        //紧急模式
+ 04B2 20900000          lds R2,_urgencyFlag
+ 04B6 2220              tst R2
+ 04B8 31F1              breq L37
+ 04BA           X17:
+ 04BA                   .dbline 115
+ 04BA           ;       {
+ 04BA                   .dbline 117
+ 04BA           ;         //GICR &= ~(1<<INT2);                 //关闭外部中断2
+ 04BA           ;         main_red();
+ 04BA 0E940000          xcall _main_red
+ 04BE                   .dbline 118
+ 04BE           ;         second_red();
+ 04BE 0E940000          xcall _second_red
+ 04C2 20C0              xjmp L40
+ 04C4           L39:
+ 04C4                   .dbline 120
+ 04C4           ;         while(1)
+ 04C4           ;         {
+ 04C4                   .dbline 121
+ 04C4           ;           if(urgencyFlag==0)break;
+ 04C4 20900000          lds R2,_urgencyFlag
+ 04C8 2220              tst R2
+ 04CA 09F4              brne L42
+ 04CC           X18:
+ 04CC                   .dbline 121
+ 04CC 1CC0              xjmp L41
+ 04CE           L42:
+ 04CE                   .dbline 122
+ 04CE           ;           LS139_G_H;
+ 04CE DC98              cbi 0x1b,4
+ 04D0                   .dbline 123
+ 04D0           ;               Write_Data(0,10);  //数码管全亮
+ 04D0 2AE0              ldi R18,10
+ 04D2 30E0              ldi R19,0
+ 04D4 0027              clr R16
+ 04D6 1127              clr R17
+ 04D8 0E940000          xcall _Write_Data
+ 04DC                   .dbline 124
+ 04DC           ;               delay_nms(500);
+ 04DC 04EF              ldi R16,500
+ 04DE 11E0              ldi R17,1
+ 04E0 0E940000          xcall _delay_nms
+ 04E4                   .dbline 125
+ 04E4           ;               LS139_G_L;
+ 04E4 DC98              cbi 0x1b,4
+ 04E6                   .dbline 126
+ 04E6           ;               Write_Data(0,11);  //数码管全灭
+ 04E6 2BE0              ldi R18,11
+ 04E8 30E0              ldi R19,0
+ 04EA 0027              clr R16
+ 04EC 1127              clr R17
+ 04EE 0E940000          xcall _Write_Data
+ 04F2                   .dbline 127
+ 04F2           ;               if(urgencyFlag==0)break;
+ 04F2 20900000          lds R2,_urgencyFlag
+ 04F6 2220              tst R2
+ 04F8 09F4              brne L44
+ 04FA           X19:
+ 04FA                   .dbline 127
+ 04FA 05C0              xjmp L41
+ 04FC           L44:
+ 04FC                   .dbline 128
+ 04FC           ;               delay_nms(500);
+ 04FC 04EF              ldi R16,500
+ 04FE 11E0              ldi R17,1
+ 0500 0E940000          xcall _delay_nms
+ 0504                   .dbline 129
+ 0504           ;         }
+ 0504           L40:
+ 0504                   .dbline 119
+ 0504 DFCF              xjmp L39
+ 0506           L41:
+ 0506                   .dbline 130
+ 0506           ;       }
+ 0506           L37:
+ 0506                   .dbline 131
+ 0506           ;       if(0)        //紧急模式
+ 0506 00C0              xjmp L46
+ 0508           L46:
+ 0508                   .dbline 137
+ 0508           ;       {
+ 0508           ;         //main_yellow();
+ 0508           ;         second_yellow();
+ 0508           ;         
+ 0508           ;       }
+ 0508           ;   }
+ 0508           L4:
+ 0508                   .dbline 53
+ 0508 AECD              xjmp L3
+ 050A           X20:
+ 050A                   .dbline -2
+ 050A           L2:
+ 050A                   .dbline 0 ; func end
+ 050A 2196              adiw R28,1
+ 050C 0895              ret
+ 050E                   .dbend
+ 050E                   .dbfunc e decode_H _decode_H fV
+ 050E           ;           data -> R10
+                        .even
+ 050E           _decode_H::
+ 050E AA92              st -y,R10
+ 0510 A02E              mov R10,R16
+ 0512                   .dbline -1
+ 0512                   .dbline 144
+ 0512           ;   
+ 0512           ;   
+ 0512           ; }
+ 0512           ; 
+ 0512           ; //把秒数十位和个位分拆开
+ 0512           ; void decode_H(uchar data)
+ 0512           ; {
+ 0512                   .dbline 145
+ 0512           ;   Number_H=data/10;
+ 0512 1AE0              ldi R17,10
+ 0514 0A2D              mov R16,R10
+ 0516 0E940000          xcall div8u
+ 051A 00930100          sts _Number_H,R16
+ 051E                   .dbline -2
+ 051E           L48:
+ 051E                   .dbline 0 ; func end
+ 051E A990              ld R10,y+
+ 0520 0895              ret
+ 0522                   .dbsym r data 10 c
+ 0522                   .dbend
+ 0522                   .dbfunc e decode_L _decode_L fV
+ 0522           ;           data -> R10
+                        .even
+ 0522           _decode_L::
+ 0522 AA92              st -y,R10
+ 0524 A02E              mov R10,R16
+ 0526                   .dbline -1
+ 0526                   .dbline 148
+ 0526           ; }
+ 0526           ; void decode_L(uchar data)
+ 0526           ; {
+ 0526                   .dbline 149
+ 0526           ;   Number_L=data%10;
+ 0526 1AE0              ldi R17,10
+ 0528 0A2D              mov R16,R10
+ 052A 0E940000          xcall mod8u
+ 052E 00930000          sts _Number_L,R16
+ 0532                   .dbline -2
+ 0532           L49:
+ 0532                   .dbline 0 ; func end
+ 0532 A990              ld R10,y+
+ 0534 0895              ret
+ 0536                   .dbsym r data 10 c
+ 0536                   .dbend
+                        .area bss(ram, con, rel)
+ 0000                   .dbfile C:\Users\Administrator\Desktop\TrafficLight595\main.c
+ 0000           _Number_L::
+ 0000                   .blkb 1
+ 0001                   .dbsym e Number_L _Number_L c
+ 0001           _Number_H::
+ 0001                   .blkb 1
+ 0002                   .dbsym e Number_H _Number_H c
+ 0002           ; }

@@ -1,0 +1,156 @@
+                        .module MAX7219.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile MAX7219.c
+ 0000                   .dbfile C:\Users\Administrator\Desktop\交通灯\MAX7219.c
+ 0000                   .dbfunc e Write_Max7219_byte _Write_Max7219_byte fV
+ 0000           ;              i -> R20
+ 0000           ;           DATA -> R16
+                        .even
+ 0000           _Write_Max7219_byte::
+ 0000 4A93              st -y,R20
+ 0002                   .dbline -1
+ 0002                   .dbline 12
+ 0002           ; #include<iom16v.h>
+ 0002           ; #include"MAX7219.h"
+ 0002           ; #include"delay.h"
+ 0002           ; 
+ 0002           ; 
+ 0002           ; //--------------------------------------------
+ 0002           ; //功能：向MAX7219(U3)写入字节
+ 0002           ; //入口参数：DATA 
+ 0002           ; //出口参数：无
+ 0002           ; //说明：
+ 0002           ; void Write_Max7219_byte(uchar DATA)         
+ 0002           ; {
+ 0002                   .dbline 14
+ 0002           ;       uchar i;    
+ 0002           ;               Max7219_pinCS_L;                
+ 0002 AF98              cbi 0x15,7
+ 0004                   .dbline 15
+ 0004           ;           for(i=8;i>=1;i--)
+ 0004 48E0              ldi R20,8
+ 0006 09C0              xjmp L5
+ 0008           L2:
+ 0008                   .dbline 16
+ 0008           ;           {             
+ 0008                   .dbline 17
+ 0008           ;             Max7219_pinCLK_L;
+ 0008 AD98              cbi 0x15,5
+ 000A                   .dbline 18
+ 000A           ;                       if(DATA&0x80)Max7219_pinDIN_H;
+ 000A 07FF              sbrs R16,7
+ 000C 02C0              rjmp L6
+ 000E           X0:
+ 000E                   .dbline 18
+ 000E AE9A              sbi 0x15,6
+ 0010 01C0              xjmp L7
+ 0012           L6:
+ 0012                   .dbline 19
+ 0012           ;                       else Max7219_pinDIN_L;
+ 0012 AE98              cbi 0x15,6
+ 0014           L7:
+ 0014                   .dbline 20
+ 0014           ;             DATA=DATA<<1;
+ 0014 000F              lsl R16
+ 0016                   .dbline 21
+ 0016           ;             Max7219_pinCLK_H;
+ 0016 AD9A              sbi 0x15,5
+ 0018                   .dbline 22
+ 0018           ;            }                                 
+ 0018           L3:
+ 0018                   .dbline 15
+ 0018 4A95              dec R20
+ 001A           L5:
+ 001A                   .dbline 15
+ 001A 4130              cpi R20,1
+ 001C A8F7              brsh L2
+ 001E           X1:
+ 001E                   .dbline -2
+ 001E           L1:
+ 001E                   .dbline 0 ; func end
+ 001E 4991              ld R20,y+
+ 0020 0895              ret
+ 0022                   .dbsym r i 20 c
+ 0022                   .dbsym r DATA 16 c
+ 0022                   .dbend
+ 0022                   .dbfunc e Write_Max7219 _Write_Max7219 fV
+ 0022           ;            dat -> R10
+ 0022           ;        address -> R12
+                        .even
+ 0022           _Write_Max7219::
+ 0022 AA92              st -y,R10
+ 0024 CA92              st -y,R12
+ 0026 A22E              mov R10,R18
+ 0028 C02E              mov R12,R16
+ 002A                   .dbline -1
+ 002A                   .dbline 30
+ 002A           ; }
+ 002A           ; //-------------------------------------------
+ 002A           ; //功能：向MAX7219写入数据
+ 002A           ; //入口参数：address、dat
+ 002A           ; //出口参数：无
+ 002A           ; //说明：
+ 002A           ; void Write_Max7219(uchar address,uchar dat)
+ 002A           ; { 
+ 002A                   .dbline 31
+ 002A           ;      Max7219_pinCS_L;
+ 002A AF98              cbi 0x15,7
+ 002C                   .dbline 32
+ 002C           ;        Write_Max7219_byte(address);           //写入地址，即数码管编号
+ 002C 0C2D              mov R16,R12
+ 002E E8DF              xcall _Write_Max7219_byte
+ 0030                   .dbline 33
+ 0030           ;      Write_Max7219_byte(dat);               //写入数据，即数码管显示数字 
+ 0030 0A2D              mov R16,R10
+ 0032 E6DF              xcall _Write_Max7219_byte
+ 0034                   .dbline 34
+ 0034           ;        Max7219_pinCS_H;                        
+ 0034 AF9A              sbi 0x15,7
+ 0036                   .dbline -2
+ 0036           L8:
+ 0036                   .dbline 0 ; func end
+ 0036 C990              ld R12,y+
+ 0038 A990              ld R10,y+
+ 003A 0895              ret
+ 003C                   .dbsym r dat 10 c
+ 003C                   .dbsym r address 12 c
+ 003C                   .dbend
+ 003C                   .dbfunc e Init_MAX7219 _Init_MAX7219 fV
+                        .even
+ 003C           _Init_MAX7219::
+ 003C                   .dbline -1
+ 003C                   .dbline 38
+ 003C           ; }
+ 003C           ; 
+ 003C           ; void Init_MAX7219(void)
+ 003C           ; {
+ 003C                   .dbline 39
+ 003C           ;  Write_Max7219(0x09, 0xff);       //译码方式：BCD码
+ 003C 2FEF              ldi R18,255
+ 003E 09E0              ldi R16,9
+ 0040 F0DF              xcall _Write_Max7219
+ 0042                   .dbline 40
+ 0042           ;  Write_Max7219(0x0a, 0x03);       //亮度
+ 0042 23E0              ldi R18,3
+ 0044 0AE0              ldi R16,10
+ 0046 EDDF              xcall _Write_Max7219
+ 0048                   .dbline 41
+ 0048           ;  Write_Max7219(0x0b, 0x07);       //扫描界限；4个数码管显示
+ 0048 27E0              ldi R18,7
+ 004A 0BE0              ldi R16,11
+ 004C EADF              xcall _Write_Max7219
+ 004E                   .dbline 42
+ 004E           ;  Write_Max7219(0x0c, 0x01);       //掉电模式：0，普通模式：1
+ 004E 21E0              ldi R18,1
+ 0050 0CE0              ldi R16,12
+ 0052 E7DF              xcall _Write_Max7219
+ 0054                   .dbline 43
+ 0054           ;  Write_Max7219(0x0f, 0x01);       //显示测试：1；测试结束，正常显示：0
+ 0054 21E0              ldi R18,1
+ 0056 0FE0              ldi R16,15
+ 0058                   .dbline -2
+ 0058           L9:
+ 0058                   .dbline 0 ; func end
+ 0058 E4CF              xjmp _Write_Max7219
+ 005A                   .dbend
+ 005A           ; }

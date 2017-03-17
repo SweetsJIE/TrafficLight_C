@@ -1,0 +1,74 @@
+/********************************************************************
+            利用HC595芯片点亮led
+********************************************************************/
+
+#include<iom16v.h>
+#include<macros.h>
+#include"HC_595.h"
+#include"USART.h"
+
+const uchar seg[12]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f,0xff,0x00};
+const uchar dip[5]={0xff,0x01,0x02,0x04,0x08};
+
+void HC_595_init(void)           //io口配置
+{
+   DDRC|=(1<<HC595_CLK1)|(1<<HC595_LOAD)|(1<<HC595_DIN)|(1<<HC595_CLK2);
+   PORTC|=(1<<HC595_CLK1)|(1<<HC595_LOAD)|(1<<HC595_DIN)|(1<<HC595_CLK2);
+}
+
+
+void Send_Seg(uchar data)              //发送数据到HC595
+{   
+   uchar i;
+   for(i=0;i<8;i++)
+   {
+      PORTC&=~(1<<HC595_CLK1);
+	  if(data&0x80)
+	      PORTC|=(1<<HC595_DIN);
+	  else 
+	      PORTC&=~(1<<HC595_DIN);
+	  PORTC|=1<<HC595_CLK1;
+	  data<<=1;
+   }
+}
+
+void Send_Dip(uchar data)              //发送数据到HC595
+{   
+   uchar i;
+   for(i=0;i<8;i++)
+   {
+      PORTC&=~(1<<HC595_CLK2);
+	  if(data&0x80)
+	      PORTC|=(1<<HC595_DIN);
+	  else 
+	      PORTC&=~(1<<HC595_DIN);
+	  PORTC|=1<<HC595_CLK2;
+	  data<<=1;
+   }
+}
+
+void Drive_HC595(uchar data,uchar hc_bit)        //载入数据到HC595
+{
+	 if(hc_bit)
+	 {
+	   PORTC&=~(1<<HC595_CLK2);
+	   PORTC&=~(1<<HC595_LOAD);
+	   Send_Dip(data);
+	   PORTC|=(1<<HC595_LOAD);
+	 } 
+	 else
+	 {
+	   PORTC&=~(1<<HC595_CLK1);
+	   PORTC&=~(1<<HC595_LOAD);
+	   Send_Seg(data);
+	   PORTC|=(1<<HC595_LOAD);
+	 }  
+}
+
+void Write_Data(uchar bit ,uchar data)
+{
+  Drive_HC595(~dip[bit],1);
+  Drive_HC595(seg[data],0);
+  delay_nms(5);
+}
+

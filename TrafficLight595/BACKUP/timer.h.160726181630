@@ -1,0 +1,6 @@
+
+
+uchar sec = 0;
+
+void timer1_init();
+void Int_TCCR1A();

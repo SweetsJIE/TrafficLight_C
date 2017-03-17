@@ -1,0 +1,42 @@
+XL
+H 4 areas 3 global symbols
+M button.c
+A text size 36 flags 0
+dbfile button.c
+dbfile C:\Users\Administrator\Desktop\交通灯\button.c
+dbfunc e Int0_button_init 0 fV
+dbline FFFFFFFF 0
+dbline 8 0
+dbline 9 0
+dbline A 4
+dbline FFFFFFFE 8
+dbline 0 8
+dbfunc e Int0_button A fV
+dbline FFFFFFFF 14
+dbline E 14
+dbline F 14
+dbline FFFFFFFE 2A
+dbline 0 2A
+S _Int0_button Def000A
+S _Int0_button_init Def0000
+A data size 1 flags 20
+dbfile button.c
+dbfile C:\Users\Administrator\Desktop\交通灯\button.c
+dbsym e S_flag 0 c
+S _S_flag Def0000
+A idata size 1 flags 0
+A vector size 8 flags C
+T 00 00 00
+R 00 00 02 00
+T 00 00 82 E0 85 BF 80 E4 8B BF 08 95
+R 00 00 00 00
+T 04 00 0C 94 05 00
+R 00 00 03 00 10 04 00 00
+T 0A 00 2A 92 0A 93 1A 93 2F B6 2A 92 20 90 00 00
+R 00 00 00 00 00 0E 01 00
+T 18 00 22 20 19 F4 01 E0 10 E0 02 C0 00 27 11 27
+R 00 00 00 00
+T 26 00 00 93 00 00 29 90 2F BE 19 91 09 91 29 90
+R 00 00 00 00 00 04 01 00
+T 34 00 18 95
+R 00 00 00 00

@@ -1,0 +1,111 @@
+#include<iom16v.h>
+#include<macros.h>
+#include"timer.h"
+#include"MAX7219.h"
+#include"74LS139.h"
+#include"button.h"
+
+uchar Number_H;
+uchar Number_L;
+uchar count=0;
+
+void io_init()
+{
+  DDRA=0x1f;
+  PORTA=0x00;
+  DDRB=0xff;
+  PORTB=0xff;
+  DDRC=0x07;
+  PORTC=0x00;
+  DDRD=0x00;
+  PORTD=0x04;
+}
+
+void main()
+{
+  io_init();
+  Init_MAX7219();
+  timer1_init();
+  Int0_button_init();
+  SREG|=BIT(7);
+  
+  while(1)
+  {
+    if(S_flag==0)
+	{
+	  LS139_G_L;
+	  while(sec<=50)
+	  {
+	    if(S_flag)break;
+	    Write_Max7219(1,decode_H(50-sec));
+        Write_Max7219(2,decode_L(50-sec));
+		Write_Max7219(3,decode_H(50-sec));
+        Write_Max7219(4,decode_L(50-sec));
+		main_green();
+		second_red();
+	  }
+	  while(sec>50&&sec<=55)
+	  {
+	    if(S_flag)break;
+	    Write_Max7219(1,decode_H(55-sec));
+        Write_Max7219(2,decode_L(55-sec));
+		Write_Max7219(3,decode_H(55-sec));
+        Write_Max7219(4,decode_L(55-sec));
+		main_yellow();
+		second_yellow();
+	  }
+	  while(sec>55&&sec<=85)
+	  {
+	    if(S_flag)break;
+	    Write_Max7219(1,decode_H(85-sec));
+        Write_Max7219(2,decode_L(85-sec));
+		Write_Max7219(3,decode_H(85-sec));
+        Write_Max7219(4,decode_L(85-sec));
+		main_red();
+		second_green();
+	  }
+	  while(sec>85&&sec<=90)
+	  {
+	    if(S_flag)break;
+	    Write_Max7219(1,decode_H(90-sec));
+        Write_Max7219(2,decode_L(90-sec));
+		Write_Max7219(3,decode_H(90-sec));
+        Write_Max7219(4,decode_L(90-sec));
+		main_yellow();
+		second_yellow();
+	  }
+	}
+	if(S_flag)
+	{
+	  while(1)
+	  {
+	    LS139_G_H;
+		/*Write_Max7219(1,0x00);
+        Write_Max7219(2,0x00);
+		Write_Max7219(3,0x00);
+        Write_Max7219(4,0x00);*/
+		Write_Max7219(0x0c, 0x00);
+		Delay_xms(800);
+		LS139_G_L;
+		Write_Max7219(0x0c, 0x01);
+		Write_Max7219(1,8);
+        Write_Max7219(2,8);
+		Write_Max7219(3,8);
+        Write_Max7219(4,8);
+		Delay_xms(800);
+	  }
+	}
+  }
+  
+  
+}
+
+//把秒数十位和个位分拆开
+void decode_H(uchar data)
+{
+  Number_H=data/10;
+}
+void decode_L(uchar data)
+{
+  Number_L=data%10;
+}

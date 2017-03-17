@@ -1,0 +1,141 @@
+                        .module delay.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile delay.c
+ 0000                   .dbfile C:\Users\Administrator\Desktop\交通灯\delay.c
+ 0000                   .dbfunc e delay_1us _delay_1us fV
+                        .even
+ 0000           _delay_1us::
+ 0000                   .dbline -1
+ 0000                   .dbline 6
+ 0000           ; 
+ 0000           ; #include <iom16v.h>
+ 0000           ; #include<macros.h>
+ 0000           ; 
+ 0000           ; void delay_1us(void)                 //1us延时函数
+ 0000           ; {
+ 0000                   .dbline 7
+ 0000           ;    NOP();
+ 0000 0000              nop
+ 0002                   .dbline -2
+ 0002           L1:
+ 0002                   .dbline 0 ; func end
+ 0002 0895              ret
+ 0004                   .dbend
+ 0004                   .dbfunc e delay_nus _delay_nus fV
+ 0004           ;              i -> R20,R21
+ 0004           ;              n -> R10,R11
+                        .even
+ 0004           _delay_nus::
+ 0004 0E940000          xcall push_xgset300C
+ 0008 5801              movw R10,R16
+ 000A                   .dbline -1
+ 000A                   .dbline 11
+ 000A           ; }
+ 000A           ; 
+ 000A           ; void delay_nus(unsigned int n)       //N us延时函数
+ 000A           ; {
+ 000A                   .dbline 12
+ 000A           ;    unsigned int i=0;
+ 000A                   .dbline 13
+ 000A           ;      for (i=0;i<n;i++)
+ 000A 4427              clr R20
+ 000C 5527              clr R21
+ 000E 03C0              xjmp L6
+ 0010           L3:
+ 0010                   .dbline 14
+ 0010           ;          delay_1us();
+ 0010 F7DF              xcall _delay_1us
+ 0012           L4:
+ 0012                   .dbline 13
+ 0012 4F5F              subi R20,255  ; offset = 1
+ 0014 5F4F              sbci R21,255
+ 0016           L6:
+ 0016                   .dbline 13
+ 0016 4A15              cp R20,R10
+ 0018 5B05              cpc R21,R11
+ 001A D0F3              brlo L3
+ 001C           X0:
+ 001C                   .dbline -2
+ 001C           L2:
+ 001C                   .dbline 0 ; func end
+ 001C 0C940000          xjmp pop_xgset300C
+ 0020                   .dbsym r i 20 i
+ 0020                   .dbsym r n 10 i
+ 0020                   .dbend
+ 0020                   .dbfunc e delay_1ms _delay_1ms fV
+ 0020           ;              i -> R16,R17
+                        .even
+ 0020           _delay_1ms::
+ 0020                   .dbline -1
+ 0020                   .dbline 18
+ 0020           ; }
+ 0020           ;   
+ 0020           ; void delay_1ms(void)                 //1ms延时函数
+ 0020           ; {
+ 0020                   .dbline 20
+ 0020           ;     unsigned int i;
+ 0020           ;     for (i=0;i<1140;i++);
+ 0020 0027              clr R16
+ 0022 1127              clr R17
+ 0024 02C0              xjmp L11
+ 0026           L8:
+ 0026                   .dbline 20
+ 0026           L9:
+ 0026                   .dbline 20
+ 0026 0F5F              subi R16,255  ; offset = 1
+ 0028 1F4F              sbci R17,255
+ 002A           L11:
+ 002A                   .dbline 20
+ 002A 0437              cpi R16,116
+ 002C E4E0              ldi R30,4
+ 002E 1E07              cpc R17,R30
+ 0030 D0F3              brlo L8
+ 0032           X1:
+ 0032                   .dbline -2
+ 0032           L7:
+ 0032                   .dbline 0 ; func end
+ 0032 0895              ret
+ 0034                   .dbsym r i 16 i
+ 0034                   .dbend
+ 0034                   .dbfunc e delay_nms _delay_nms fV
+ 0034           ;              i -> R20,R21
+ 0034           ;              n -> R10,R11
+                        .even
+ 0034           _delay_nms::
+ 0034 0E940000          xcall push_xgset300C
+ 0038 5801              movw R10,R16
+ 003A                   .dbline -1
+ 003A                   .dbline 24
+ 003A           ; }
+ 003A           ;   
+ 003A           ; void delay_nms(unsigned int n)       //N ms延时函数
+ 003A           ; {
+ 003A                   .dbline 25
+ 003A           ;    unsigned int  i=0;
+ 003A                   .dbline 26
+ 003A           ;    for (i=0;i<n;i++)
+ 003A 4427              clr R20
+ 003C 5527              clr R21
+ 003E 03C0              xjmp L16
+ 0040           L13:
+ 0040                   .dbline 27
+ 0040           ;    delay_1ms();
+ 0040 EFDF              xcall _delay_1ms
+ 0042           L14:
+ 0042                   .dbline 26
+ 0042 4F5F              subi R20,255  ; offset = 1
+ 0044 5F4F              sbci R21,255
+ 0046           L16:
+ 0046                   .dbline 26
+ 0046 4A15              cp R20,R10
+ 0048 5B05              cpc R21,R11
+ 004A D0F3              brlo L13
+ 004C           X2:
+ 004C                   .dbline -2
+ 004C           L12:
+ 004C                   .dbline 0 ; func end
+ 004C 0C940000          xjmp pop_xgset300C
+ 0050                   .dbsym r i 20 i
+ 0050                   .dbsym r n 10 i
+ 0050                   .dbend
+ 0050           ; }

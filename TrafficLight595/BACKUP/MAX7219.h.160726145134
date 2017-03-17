@@ -1,0 +1,4 @@
+//¶¨ÒåMax7219¶Ë¿Ú
+define Max7219_pinCLK = P1^2;
+define Max7219_pinCS  = P1^1;
+define Max7219_pinDIN = P1^0;

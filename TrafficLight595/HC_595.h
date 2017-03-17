@@ -1,0 +1,16 @@
+
+#ifndef _HC_595_H
+#define _HC_595_H
+
+#define HC595_CLK2  PC2
+#define HC595_CLK1  PC5
+#define HC595_LOAD PC6
+#define HC595_DIN   PC7
+
+extern const uchar seg[12];
+extern const uchar dip[5];
+
+void Send_byte(uchar data);
+void HC_595_init(void);
+
+#endif

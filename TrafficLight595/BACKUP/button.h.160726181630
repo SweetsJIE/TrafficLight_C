@@ -1,0 +1,7 @@
+
+
+
+uchar S_flag = 0;
+
+void Int0_button_init();
+void Int0_button();

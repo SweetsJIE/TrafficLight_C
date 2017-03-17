@@ -1,0 +1,86 @@
+XL
+H 1 areas 8 global symbols
+M _74LS139.c
+A text size 30 flags 0
+dbfile 74LS139.c
+dbfile C:\Users\Administrator\Desktop\½»Í¨µÆ\74LS139.c
+dbfunc e main_red 0 fI
+dbline FFFFFFFF 0
+dbline 6 0
+dbline 7 0
+dbline 8 2
+dbline FFFFFFFE 4
+dbline 0 4
+dbfunc e main_green 6 fI
+dbline FFFFFFFF 6
+dbline D 6
+dbline E 6
+dbline F 8
+dbline FFFFFFFE A
+dbline 0 A
+dbfunc e main_yellow C fI
+dbline FFFFFFFF C
+dbline 14 C
+dbline 15 C
+dbline 16 E
+dbline FFFFFFFE 10
+dbline 0 10
+dbfunc e main_close 12 fI
+dbline FFFFFFFF 12
+dbline 1B 12
+dbline 1C 12
+dbline 1D 14
+dbline FFFFFFFE 16
+dbline 0 16
+dbfunc e second_red 18 fI
+dbline FFFFFFFF 18
+dbline 22 18
+dbline 23 18
+dbline 24 1A
+dbline FFFFFFFE 1C
+dbline 0 1C
+dbfunc e second_green 1E fI
+dbline FFFFFFFF 1E
+dbline 29 1E
+dbline 2A 1E
+dbline 2B 20
+dbline FFFFFFFE 22
+dbline 0 22
+dbfunc e second_yellow 24 fI
+dbline FFFFFFFF 24
+dbline 30 24
+dbline 31 24
+dbline 32 26
+dbline FFFFFFFE 28
+dbline 0 28
+dbfunc e second_close 2A fI
+dbline FFFFFFFF 2A
+dbline 37 2A
+dbline 38 2A
+dbline 39 2C
+dbline FFFFFFFE 2E
+dbline 0 2E
+S _second_green Def001E
+S _second_close Def002A
+S _main_green Def0006
+S _second_red Def0018
+S _main_close Def0012
+S _main_red Def0000
+S _second_yellow Def0024
+S _main_yellow Def000C
+T 00 00 D8 98 D9 98 08 95
+R 00 00 00 00
+T 06 00 D8 9A D9 98 08 95
+R 00 00 00 00
+T 0C 00 D8 98 D9 9A 08 95
+R 00 00 00 00
+T 12 00 D8 9A D9 9A 08 95
+R 00 00 00 00
+T 18 00 DA 98 DB 98 08 95
+R 00 00 00 00
+T 1E 00 DA 9A DB 98 08 95
+R 00 00 00 00
+T 24 00 DA 98 DB 9A 08 95
+R 00 00 00 00
+T 2A 00 DA 9A DB 9A 08 95
+R 00 00 00 00

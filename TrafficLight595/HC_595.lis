@@ -1,0 +1,337 @@
+                        .module HC_595.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile HC_595.c
+                        .area data(ram, con, rel)
+ 0000                   .dbfile HC_595.c
+ 0000           _seg::
+ 0000                   .blkb 2
+                        .area idata
+ 0000 3F06              .byte 63,6
+                        .area data(ram, con, rel)
+ 0002                   .dbfile HC_595.c
+ 0002                   .blkb 2
+                        .area idata
+ 0002 5B4F              .byte 91,'O
+                        .area data(ram, con, rel)
+ 0004                   .dbfile HC_595.c
+ 0004                   .blkb 2
+                        .area idata
+ 0004 666D              .byte 'f,'m
+                        .area data(ram, con, rel)
+ 0006                   .dbfile HC_595.c
+ 0006                   .blkb 2
+                        .area idata
+ 0006 7D07              .byte 125,7
+                        .area data(ram, con, rel)
+ 0008                   .dbfile HC_595.c
+ 0008                   .blkb 2
+                        .area idata
+ 0008 7F6F              .byte 127,'o
+                        .area data(ram, con, rel)
+ 000A                   .dbfile HC_595.c
+ 000A                   .blkb 2
+                        .area idata
+ 000A FF00              .byte 255,0
+                        .area data(ram, con, rel)
+ 000C                   .dbfile HC_595.c
+ 000C                   .dbfile C:\Users\Administrator\Desktop\TrafficLight595\HC_595.c
+ 000C                   .dbsym e seg _seg A[12:12]c
+ 000C           _dip::
+ 000C                   .blkb 2
+                        .area idata
+ 000C FF01              .byte 255,1
+                        .area data(ram, con, rel)
+ 000E                   .dbfile C:\Users\Administrator\Desktop\TrafficLight595\HC_595.c
+ 000E                   .blkb 2
+                        .area idata
+ 000E 0204              .byte 2,4
+                        .area data(ram, con, rel)
+ 0010                   .dbfile C:\Users\Administrator\Desktop\TrafficLight595\HC_595.c
+ 0010                   .blkb 1
+                        .area idata
+ 0010 08                .byte 8
+                        .area data(ram, con, rel)
+ 0011                   .dbfile C:\Users\Administrator\Desktop\TrafficLight595\HC_595.c
+ 0011                   .dbsym e dip _dip A[5:5]c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile C:\Users\Administrator\Desktop\TrafficLight595\HC_595.c
+ 0000                   .dbfunc e HC_595_init _HC_595_init fV
+                        .even
+ 0000           _HC_595_init::
+ 0000                   .dbline -1
+ 0000                   .dbline 14
+ 0000           ; /********************************************************************
+ 0000           ;             利用HC595芯片点亮led
+ 0000           ; ********************************************************************/
+ 0000           ; 
+ 0000           ; #include<iom16v.h>
+ 0000           ; #include<macros.h>
+ 0000           ; #include"HC_595.h"
+ 0000           ; #include"USART.h"
+ 0000           ; 
+ 0000           ; const uchar seg[12]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f,0xff,0x00};
+ 0000           ; const uchar dip[5]={0xff,0x01,0x02,0x04,0x08};
+ 0000           ; 
+ 0000           ; void HC_595_init(void)           //io口配置
+ 0000           ; {
+ 0000                   .dbline 15
+ 0000           ;    DDRC|=(1<<HC595_CLK1)|(1<<HC595_LOAD)|(1<<HC595_DIN)|(1<<HC595_CLK2);
+ 0000 84B3              in R24,0x14
+ 0002 846E              ori R24,228
+ 0004 84BB              out 0x14,R24
+ 0006                   .dbline 16
+ 0006           ;    PORTC|=(1<<HC595_CLK1)|(1<<HC595_LOAD)|(1<<HC595_DIN)|(1<<HC595_CLK2);
+ 0006 85B3              in R24,0x15
+ 0008 846E              ori R24,228
+ 000A 85BB              out 0x15,R24
+ 000C                   .dbline -2
+ 000C           L1:
+ 000C                   .dbline 0 ; func end
+ 000C 0895              ret
+ 000E                   .dbend
+ 000E                   .dbfunc e Send_Seg _Send_Seg fV
+ 000E           ;              i -> R20
+ 000E           ;           data -> R16
+                        .even
+ 000E           _Send_Seg::
+ 000E 4A93              st -y,R20
+ 0010                   .dbline -1
+ 0010                   .dbline 21
+ 0010           ; }
+ 0010           ; 
+ 0010           ; 
+ 0010           ; void Send_Seg(uchar data)              //发送数据到HC595
+ 0010           ; {   
+ 0010                   .dbline 23
+ 0010           ;    uchar i;
+ 0010           ;    for(i=0;i<8;i++)
+ 0010 4427              clr R20
+ 0012 09C0              xjmp L6
+ 0014           L3:
+ 0014                   .dbline 24
+ 0014           ;    {
+ 0014                   .dbline 25
+ 0014           ;       PORTC&=~(1<<HC595_CLK1);
+ 0014 AD98              cbi 0x15,5
+ 0016                   .dbline 26
+ 0016           ;         if(data&0x80)
+ 0016 07FF              sbrs R16,7
+ 0018 02C0              rjmp L7
+ 001A           X0:
+ 001A                   .dbline 27
+ 001A           ;             PORTC|=(1<<HC595_DIN);
+ 001A AF9A              sbi 0x15,7
+ 001C 01C0              xjmp L8
+ 001E           L7:
+ 001E                   .dbline 29
+ 001E           ;         else 
+ 001E           ;             PORTC&=~(1<<HC595_DIN);
+ 001E AF98              cbi 0x15,7
+ 0020           L8:
+ 0020                   .dbline 30
+ 0020           ;         PORTC|=1<<HC595_CLK1;
+ 0020 AD9A              sbi 0x15,5
+ 0022                   .dbline 31
+ 0022           ;         data<<=1;
+ 0022 000F              lsl R16
+ 0024                   .dbline 32
+ 0024           ;    }
+ 0024           L4:
+ 0024                   .dbline 23
+ 0024 4395              inc R20
+ 0026           L6:
+ 0026                   .dbline 23
+ 0026 4830              cpi R20,8
+ 0028 A8F3              brlo L3
+ 002A           X1:
+ 002A                   .dbline -2
+ 002A           L2:
+ 002A                   .dbline 0 ; func end
+ 002A 4991              ld R20,y+
+ 002C 0895              ret
+ 002E                   .dbsym r i 20 c
+ 002E                   .dbsym r data 16 c
+ 002E                   .dbend
+ 002E                   .dbfunc e Send_Dip _Send_Dip fV
+ 002E           ;              i -> R20
+ 002E           ;           data -> R16
+                        .even
+ 002E           _Send_Dip::
+ 002E 4A93              st -y,R20
+ 0030                   .dbline -1
+ 0030                   .dbline 36
+ 0030           ; }
+ 0030           ; 
+ 0030           ; void Send_Dip(uchar data)              //发送数据到HC595
+ 0030           ; {   
+ 0030                   .dbline 38
+ 0030           ;    uchar i;
+ 0030           ;    for(i=0;i<8;i++)
+ 0030 4427              clr R20
+ 0032 09C0              xjmp L13
+ 0034           L10:
+ 0034                   .dbline 39
+ 0034           ;    {
+ 0034                   .dbline 40
+ 0034           ;       PORTC&=~(1<<HC595_CLK2);
+ 0034 AA98              cbi 0x15,2
+ 0036                   .dbline 41
+ 0036           ;         if(data&0x80)
+ 0036 07FF              sbrs R16,7
+ 0038 02C0              rjmp L14
+ 003A           X2:
+ 003A                   .dbline 42
+ 003A           ;             PORTC|=(1<<HC595_DIN);
+ 003A AF9A              sbi 0x15,7
+ 003C 01C0              xjmp L15
+ 003E           L14:
+ 003E                   .dbline 44
+ 003E           ;         else 
+ 003E           ;             PORTC&=~(1<<HC595_DIN);
+ 003E AF98              cbi 0x15,7
+ 0040           L15:
+ 0040                   .dbline 45
+ 0040           ;         PORTC|=1<<HC595_CLK2;
+ 0040 AA9A              sbi 0x15,2
+ 0042                   .dbline 46
+ 0042           ;         data<<=1;
+ 0042 000F              lsl R16
+ 0044                   .dbline 47
+ 0044           ;    }
+ 0044           L11:
+ 0044                   .dbline 38
+ 0044 4395              inc R20
+ 0046           L13:
+ 0046                   .dbline 38
+ 0046 4830              cpi R20,8
+ 0048 A8F3              brlo L10
+ 004A           X3:
+ 004A                   .dbline -2
+ 004A           L9:
+ 004A                   .dbline 0 ; func end
+ 004A 4991              ld R20,y+
+ 004C 0895              ret
+ 004E                   .dbsym r i 20 c
+ 004E                   .dbsym r data 16 c
+ 004E                   .dbend
+ 004E                   .dbfunc e Drive_HC595 _Drive_HC595 fV
+ 004E           ;         hc_bit -> R12
+ 004E           ;           data -> R10
+                        .even
+ 004E           _Drive_HC595::
+ 004E AA92              st -y,R10
+ 0050 CA92              st -y,R12
+ 0052 C22E              mov R12,R18
+ 0054 A02E              mov R10,R16
+ 0056                   .dbline -1
+ 0056                   .dbline 51
+ 0056           ; }
+ 0056           ; 
+ 0056           ; void Drive_HC595(uchar data,uchar hc_bit)        //载入数据到HC595
+ 0056           ; {
+ 0056                   .dbline 52
+ 0056           ;        if(hc_bit)
+ 0056 CC20              tst R12
+ 0058 31F0              breq L17
+ 005A           X4:
+ 005A                   .dbline 53
+ 005A           ;        {
+ 005A                   .dbline 54
+ 005A           ;          PORTC&=~(1<<HC595_CLK2);
+ 005A AA98              cbi 0x15,2
+ 005C                   .dbline 55
+ 005C           ;          PORTC&=~(1<<HC595_LOAD);
+ 005C AE98              cbi 0x15,6
+ 005E                   .dbline 56
+ 005E           ;          Send_Dip(data);
+ 005E 0A2D              mov R16,R10
+ 0060 E6DF              xcall _Send_Dip
+ 0062                   .dbline 57
+ 0062           ;          PORTC|=(1<<HC595_LOAD);
+ 0062 AE9A              sbi 0x15,6
+ 0064                   .dbline 58
+ 0064           ;        } 
+ 0064 05C0              xjmp L18
+ 0066           L17:
+ 0066                   .dbline 60
+ 0066           ;        else
+ 0066           ;        {
+ 0066                   .dbline 61
+ 0066           ;          PORTC&=~(1<<HC595_CLK1);
+ 0066 AD98              cbi 0x15,5
+ 0068                   .dbline 62
+ 0068           ;          PORTC&=~(1<<HC595_LOAD);
+ 0068 AE98              cbi 0x15,6
+ 006A                   .dbline 63
+ 006A           ;          Send_Seg(data);
+ 006A 0A2D              mov R16,R10
+ 006C D0DF              xcall _Send_Seg
+ 006E                   .dbline 64
+ 006E           ;          PORTC|=(1<<HC595_LOAD);
+ 006E AE9A              sbi 0x15,6
+ 0070                   .dbline 65
+ 0070           ;        }  
+ 0070           L18:
+ 0070                   .dbline -2
+ 0070           L16:
+ 0070                   .dbline 0 ; func end
+ 0070 C990              ld R12,y+
+ 0072 A990              ld R10,y+
+ 0074 0895              ret
+ 0076                   .dbsym r hc_bit 12 c
+ 0076                   .dbsym r data 10 c
+ 0076                   .dbend
+ 0076                   .dbfunc e Write_Data _Write_Data fV
+ 0076           ;           data -> R10
+ 0076           ;            bit -> R12
+                        .even
+ 0076           _Write_Data::
+ 0076 AA92              st -y,R10
+ 0078 CA92              st -y,R12
+ 007A A22E              mov R10,R18
+ 007C C02E              mov R12,R16
+ 007E                   .dbline -1
+ 007E                   .dbline 69
+ 007E           ; }
+ 007E           ; 
+ 007E           ; void Write_Data(uchar bit ,uchar data)
+ 007E           ; {
+ 007E                   .dbline 70
+ 007E           ;   Drive_HC595(~dip[bit],1);
+ 007E 21E0              ldi R18,1
+ 0080 80E0              ldi R24,<_dip
+ 0082 90E0              ldi R25,>_dip
+ 0084 EC2D              mov R30,R12
+ 0086 FF27              clr R31
+ 0088 E80F              add R30,R24
+ 008A F91F              adc R31,R25
+ 008C 0081              ldd R16,z+0
+ 008E 0095              com R16
+ 0090 DEDF              xcall _Drive_HC595
+ 0092                   .dbline 71
+ 0092           ;   Drive_HC595(seg[data],0);
+ 0092 2227              clr R18
+ 0094 80E0              ldi R24,<_seg
+ 0096 90E0              ldi R25,>_seg
+ 0098 EA2D              mov R30,R10
+ 009A FF27              clr R31
+ 009C E80F              add R30,R24
+ 009E F91F              adc R31,R25
+ 00A0 0081              ldd R16,z+0
+ 00A2 D5DF              xcall _Drive_HC595
+ 00A4                   .dbline 72
+ 00A4           ;   delay_nms(5);
+ 00A4 05E0              ldi R16,5
+ 00A6 10E0              ldi R17,0
+ 00A8 0E940000          xcall _delay_nms
+ 00AC                   .dbline -2
+ 00AC           L19:
+ 00AC                   .dbline 0 ; func end
+ 00AC C990              ld R12,y+
+ 00AE A990              ld R10,y+
+ 00B0 0895              ret
+ 00B2                   .dbsym r data 10 c
+ 00B2                   .dbsym r bit 12 c
+ 00B2                   .dbend
+ 00B2           ; }
+ 00B2           ; 

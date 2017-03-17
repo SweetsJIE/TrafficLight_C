@@ -1,0 +1,17 @@
+
+#ifndef _HC_595_H
+#define _HC_595_H
+
+
+#define HC595_CLK  PA1
+#define HC595_LOAD PA2
+#define HC595_DIN  PA3
+
+extern uchar led_flag;
+
+void Send_byte(uchar data);
+void HC_595_init(void);
+void P_led_display(void);
+void R_led_display(void);
+
+#endif

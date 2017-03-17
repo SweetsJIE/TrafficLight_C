@@ -1,0 +1,9 @@
+
+//¶¨ÒåMax7219¶Ë¿Ú
+#define Max7219_pinCLK_H  
+#define Max7219_pinCLK_L 
+#define Max7219_pinCS_H  
+#define Max7219_pinCS_L  
+#define Max7219_pinDIN_H 
+#define Max7219_pinDIN_L 
+#define Max7219_pin    SBIT( PORTB, PB2 )

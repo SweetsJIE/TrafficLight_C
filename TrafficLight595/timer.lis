@@ -1,0 +1,6 @@
+                        .module timer.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile timer.c
+ 0000           ; #include<iom16v.h>
+ 0000           ; #include"timer.h"
+ 0000           ; 

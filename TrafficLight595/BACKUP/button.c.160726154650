@@ -1,0 +1,24 @@
+
+
+
+void Int0_button_init()
+{
+ 	MCUCR = (1<<ISC01);								 		//下降沿触发
+	GICR = (1<<INT0);										//使能外部中断0
+}
+#pragma interrupt_handler Int0_button: 2
+void Int0_button()
+{
+ 	if(flag)
+	{
+	 	TCNT1 = temp;
+		TIMSK |= (1<<OCIE1A);
+		flag = 0;
+	}
+	else
+	{
+	 	temp = TCNT1;
+		TIMSK &= ~(1<<OCIE1A);
+		flag = 1;
+	}
+}

@@ -1,0 +1,52 @@
+/******************************************
+    利用中断接收串口接收数据，再对数据进行
+	分类判断和执行命令，然后对字母输出
+******************************************/
+
+
+#include<iom16v.h>
+#include<macros.h>
+#include<string.h>
+#include"usart.h"
+
+uchar Feature_selection,k=0,Deal_flag,key_read,restart_flag=0,num_counter=0;
+uchar get_data[10];   //接收数组
+uint angle;           //存储角度数值
+
+
+void usart_init(void)     //配置usart寄存器
+{
+     DDRD&=~(1<<PD0);PORTD|=1<<PD0;
+	 DDRD|=1<<PD1;PORTD|=1<<PD1;
+	 UCSRC = (1<<URSEL) | (1<<UCSZ1) | (1<<UCSZ0);        //8位字符长度
+	 UBRRL = 51;                                          //9600bps   8M
+	 UCSRB = (1<<RXCIE) | (1<<RXEN) | (1<<TXEN);          //接收中断，发送中断，接收使能，发送使能                                     
+} 
+
+#pragma interrupt_handler usart_read:12
+void usart_read(void)                   //bug:串口接收与键盘扫描冲突
+{       
+     uchar i;
+     while ( !(UCSRA & (1<<RXC)) );     // 等待接收缓存器空
+     get_data[k]=UDR;
+     k++;
+	 if((strncmp("led",get_data,3))==0)   //led命令判断
+	 {
+		delay_nms(2);
+		for(k=0;k<8;k++)                //清空数组
+		{
+		   get_data[k]=0;
+		}
+        k=0;
+	 }
+
+}
+
+void usart_send(uchar data)             //TXD发送数据
+{
+     
+         while(!(UCSRA & (1<<UDRE)));   //等待发送缓存器空
+         UDR = data;
+		 while(!(UCSRA & (1<<TXC)));    //等待发送结束
+}
+

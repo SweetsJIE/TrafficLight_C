@@ -1,0 +1,13 @@
+
+#ifndef _USART_INIT_H
+#define _USART_INIT_H
+
+extern uchar Feature_selection;
+extern uchar key_read,restart_flag;
+extern uchar S_flag;
+
+void usart_init(void);
+void usart_send(uchar data);
+void Decide_E(uchar *data);
+
+#endif

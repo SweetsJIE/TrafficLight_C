@@ -1,0 +1,133 @@
+/********************************************************************
+            利用HC595芯片点亮led
+********************************************************************/
+
+#include<iom16v.h>
+#include<macros.h>
+#include"HC_595.h"
+#include"USART.h"
+
+uchar P_Water_led[8]={0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80};   //正转
+uchar R_Water_led[8]={0x80,0x40,0x20,0x10,0x08,0x04,0x02,0x01};   //反转
+uchar led_flag=0;    //led正转反转标志位
+uchar led_display;
+
+void HC_595_init(void)           //io口配置
+{
+   DDRA|=(1<<HC595_CLK)|(1<<HC595_LOAD)|(1<<HC595_DIN);
+   PORTA|=(1<<HC595_CLK)|(1<<HC595_LOAD)|(1<<HC595_DIN);
+}
+
+void Send_byte(uchar data)              //发送数据到HC595
+{   
+   uchar i;
+   for(i=0;i<8;i++)
+   {
+      PORTA&=~(1<<HC595_CLK);
+	  if(data&0x80)
+	      PORTA|=(1<<HC595_DIN);
+	  else 
+	      PORTA&=~(1<<HC595_DIN);
+	  PORTA|=1<<HC595_CLK;
+	  data<<=1;
+   }
+}
+
+void Drive_HC595(uchar data)        //载入数据到HC595
+{
+     uchar i;
+	 DDRA=(1<<HC595_CLK)|(1<<HC595_LOAD)|(1<<HC595_DIN);
+	 PORTA&=~(1<<HC595_CLK);
+	 PORTA&=~(1<<HC595_LOAD); 
+	 Send_byte(data); 
+	 PORTA|=(1<<HC595_LOAD);
+}
+
+void P_led_display(void)             //led正转
+{
+   uchar i;
+   LCD_write_string(3,1,"Led_P Mode");//显示当前的模式
+   for(i=0;i<8;i++)
+   {
+      Drive_HC595(P_Water_led[i]);   //载入正转数据
+	  key_read=Keyscan();
+	  delay_nms(50);
+	  if(key_read==16||restart_flag)  //检测按键状态
+	  {
+		  led_flag=3;
+		  restart_flag=0;             //清空标志位
+		  break;
+	  }
+	  if(key_read==1)
+	  {
+		  led_flag=1;
+		  break;
+	  }
+	  Drive_HC595(0x00);              //移位正转数据
+   }
+   
+   Drive_HC595(P_Water_led[0]);
+   
+   for(i=0;i<8;i++)
+   {
+      if(led_flag==3)break;
+	  if(led_flag==1)
+	  {
+	     Drive_HC595(0x00);           //移位正转数据
+		 Drive_HC595(0x00);           //移位正转数据
+		 break;
+	  }
+      Drive_HC595(0x00);
+	  key_read=Keyscan();
+	  delay_nms(50);
+	  if(key_read==16||restart_flag)   //检测按键状态
+	  {
+		  led_flag=3;
+		  restart_flag=0;
+		  break;
+	  }
+	  if(key_read==1)
+	  {
+		  led_flag=1;
+		  break;
+	  }
+	  Drive_HC595(P_Water_led[i]);
+   }  
+}
+
+void R_led_display(void)
+{
+   uchar i;
+   LCD_write_command(0x01);             //清屏
+   delay_nms(5);
+   LCD_write_string(4,0,"Led Mode");    //显示当前的模式
+   LCD_write_string(3,1,"Led_R Mode");
+   for(i=0;i<8;i++)
+   { 
+	  Drive_HC595(0x00);                 //移位正转数据
+	  key_read=Keyscan();
+	  delay_nms(50);
+	  if(key_read==16||restart_flag)                  //检测按键状态
+	  {
+		  led_flag=3;
+		  restart_flag=0;
+		  break;
+	  }
+	  Drive_HC595(R_Water_led[i]);       //载入正转数据
+   }
+   
+   for(i=0;i<8;i++)
+   {
+      if(led_flag==3)break;
+      Drive_HC595(R_Water_led[i]);
+	  key_read=Keyscan();
+	  delay_nms(50);
+	  if(key_read==16||restart_flag)                 //检测按键状态
+	  {
+		  led_flag=3;
+		  restart_flag=0;
+		  break;
+	  }
+	  Drive_HC595(0x00);
+   }
+}
