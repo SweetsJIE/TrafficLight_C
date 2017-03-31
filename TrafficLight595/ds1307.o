@@ -13,7 +13,7 @@ S _nightFlag Ref0000
 S _greenTime Ref0000
 A text size 116 flags 0
 dbfile ds1307.c
-dbfile C:\Users\Administrator\Desktop\TrafficLight595\ds1307.c
+dbfile C:\Users\Administrator\Desktop\交通灯\TrafficLight595\ds1307.c
 dbfunc e int2_init 0 fV
 dbline FFFFFFFF 0
 dbline C 0
@@ -65,7 +65,7 @@ S _int2 Def0006
 S _int2_init Def0000
 A data size 8 flags 20
 dbfile ds1307.c
-dbfile C:\Users\Administrator\Desktop\TrafficLight595\ds1307.c
+dbfile C:\Users\Administrator\Desktop\交通灯\TrafficLight595\ds1307.c
 dbsym e time 0 A[7:7]c
 dbsym e secCount 7 c
 S _time Def0000
@@ -104,7 +104,7 @@ T 84 00 00 00 22 20 39 F4 81 E0 80 93 00 00 22 24
 R 00 00 00 00 02 02 06 00 02 0C 08 00
 T 92 00 20 92 00 00 0A C0 20 90 00 00 22 20 31 F4
 R 00 00 00 00 02 04 05 00 02 0A 06 00
-T A0 00 22 24 20 92 00 00 81 E0 80 93 00 00 1A E0
+T A0 00 22 24 20 92 00 00 81 E0 80 93 00 00 14 E0
 R 00 00 00 00 02 06 08 00 02 0C 05 00
 T AE 00 00 91 07 00 0E 94 00 00 00 23 89 F4 44 27
 R 00 00 00 00 00 04 01 00 12 08 07 00

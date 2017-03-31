@@ -9,7 +9,7 @@
 #include"usart.h"
 #include"HC_595.h"
 
-uchar Number_H,Number_L,count=0,i=0;
+uchar Number_H,Number_L,count=0;
 
 
 void io_init()
@@ -73,13 +73,8 @@ void main()
         Write_Data(2,decode_L(greenTime+yellowTime-secCount));
 		Write_Data(3,decode_H(greenTime+yellowTime-secCount));
         Write_Data(4,decode_L(greenTime+yellowTime-secCount));
-		i++;
-		if(i==25)main_yellow();   //╩фиа
-		else if(i==50)
-		{
-		  main_close();
-		  i=0;
-		}
+		main_yellow();
+		main_close();
 		second_red();
 	  }
 	  while(secCount>(greenTime+yellowTime)&&secCount<=(greenTime+yellowTime+redTime))
@@ -99,14 +94,9 @@ void main()
         Write_Data(2,decode_L(greenTime+yellowTime+redTime+yellowTime-secCount));
 		Write_Data(3,decode_H(greenTime+yellowTime+redTime+yellowTime-secCount));
         Write_Data(4,decode_L(greenTime+yellowTime+redTime+yellowTime-secCount));
-		i++;
-		if(i==25)second_yellow();   //╩фиа
-		else if(i==50)
-		{
-		  second_close();
-		  i=0;
-		}
 		main_red();
+		second_yellow();
+		second_close();
 	  }
 	}
 	

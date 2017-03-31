@@ -29,22 +29,19 @@ void int2(void)
 		
 		time[2]=TWI_Read(WD_DS1307_ADDR,RD_DS1307_ADDR,2);
 		
-		if(time[2]>=0 && time[2] <= 5 && urgencyFlag==0)   //凌晨0-5点夜间模式
+		if(time[2]>=0 && time[2] <= 5)   //凌晨0-5点夜间模式
 		{
 		  nightFlag = 1;
 		  daytimeFlag = 0;
 		}else
 		{
-		  if(urgencyFlag==0)
-		  {
-		    nightFlag = 0;
-	        daytimeFlag = 1;
-		  }
+		  nightFlag = 0;
+	      daytimeFlag = 1;
 		}
 	}
 	
 	   
-	if(secCount%4==0)
+	if(secCount%10==0)
 	{
 	  for(i=0;i<20;i++)                //清空串口暂存数组
 	  {

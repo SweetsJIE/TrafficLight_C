@@ -14,17 +14,17 @@
  0001 000000000000      .byte 0,0,0,0,0,0
                         .area data(ram, con, rel)
  0007                   .dbfile ds1307.c
- 0007                   .dbfile C:\Users\Administrator\Desktop\TrafficLight595\ds1307.c
+ 0007                   .dbfile C:\Users\Administrator\Desktop\交通灯\TrafficLight595\ds1307.c
  0007                   .dbsym e time _time A[7:7]c
  0007           _secCount::
  0007                   .blkb 1
                         .area idata
  0007 00                .byte 0
                         .area data(ram, con, rel)
- 0008                   .dbfile C:\Users\Administrator\Desktop\TrafficLight595\ds1307.c
+ 0008                   .dbfile C:\Users\Administrator\Desktop\交通灯\TrafficLight595\ds1307.c
  0008                   .dbsym e secCount _secCount c
                         .area text(rom, con, rel)
- 0000                   .dbfile C:\Users\Administrator\Desktop\TrafficLight595\ds1307.c
+ 0000                   .dbfile C:\Users\Administrator\Desktop\交通灯\TrafficLight595\ds1307.c
  0000                   .dbfunc e int2_init _int2_init fV
                         .even
  0000           _int2_init::
@@ -57,7 +57,7 @@
                         .org 72
  0048 0C940300          jmp _int2
                         .area text(rom, con, rel)
- 0006                   .dbfile C:\Users\Administrator\Desktop\TrafficLight595\ds1307.c
+ 0006                   .dbfile C:\Users\Administrator\Desktop\交通灯\TrafficLight595\ds1307.c
  0006                   .dbfunc e int2 _int2 fV
  0006           ;       time_buf -> R20
  0006           ;            buf -> R10
@@ -198,8 +198,8 @@
  00AC                   .dbline 47
  00AC           ;       
  00AC           ;          
- 00AC           ;       if(secCount%10==0)
- 00AC 1AE0              ldi R17,10
+ 00AC           ;       if(secCount%4==0)
+ 00AC 14E0              ldi R17,4
  00AE 00910700          lds R16,_secCount
  00B2 0E940000          xcall mod8u
  00B6 0023              tst R16

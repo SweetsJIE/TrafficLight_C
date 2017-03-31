@@ -9,7 +9,7 @@
 #include"usart.h"
 #include"HC_595.h"
 
-uchar Number_H,Number_L,count=0;
+uchar Number_H,Number_L,count=0,i=0;
 
 
 void io_init()
@@ -59,8 +59,8 @@ void main()
 	  while(secCount<=greenTime)
 	  {
 	    if(urgencyFlag || nightFlag)break;
-	    Write_Data(1,decode_H(greenTime-secCount));
-        Write_Data(2,decode_L(greenTime-secCount));
+	    Write_Data(1,decode_H(greenTime+yellowTime-secCount));
+        Write_Data(2,decode_L(greenTime+yellowTime-secCount));
 		Write_Data(3,decode_H(greenTime-secCount));
         Write_Data(4,decode_L(greenTime-secCount));
 		main_green();
@@ -73,16 +73,22 @@ void main()
         Write_Data(2,decode_L(greenTime+yellowTime-secCount));
 		Write_Data(3,decode_H(greenTime+yellowTime-secCount));
         Write_Data(4,decode_L(greenTime+yellowTime-secCount));
-		main_yellow();
-		second_yellow();
+		i++;
+		if(i==25)main_yellow();   //╩фиа
+		else if(i==50)
+		{
+		  main_close();
+		  i=0;
+		}
+		second_red();
 	  }
 	  while(secCount>(greenTime+yellowTime)&&secCount<=(greenTime+yellowTime+redTime))
 	  {
 	    if(urgencyFlag || nightFlag)break;
 	    Write_Data(1,decode_H(greenTime+yellowTime+redTime-secCount));
         Write_Data(2,decode_L(greenTime+yellowTime+redTime-secCount));
-		Write_Data(3,decode_H(greenTime+yellowTime+redTime-secCount));
-        Write_Data(4,decode_L(greenTime+yellowTime+redTime-secCount));
+		Write_Data(3,decode_H(greenTime+yellowTime+yellowTime+redTime-secCount));
+        Write_Data(4,decode_L(greenTime+yellowTime+yellowTime+redTime-secCount));
 		main_red();
 		second_green();
 	  }
@@ -93,8 +99,14 @@ void main()
         Write_Data(2,decode_L(greenTime+yellowTime+redTime+yellowTime-secCount));
 		Write_Data(3,decode_H(greenTime+yellowTime+redTime+yellowTime-secCount));
         Write_Data(4,decode_L(greenTime+yellowTime+redTime+yellowTime-secCount));
-		main_yellow();
-		second_yellow();
+		i++;
+		if(i==25)second_yellow();   //╩фиа
+		else if(i==50)
+		{
+		  second_close();
+		  i=0;
+		}
+		main_red();
 	  }
 	}
 	
